@@ -8,23 +8,23 @@ struct list *list_create() {
         return NULL;
     }
 
-    this->first = NULL;
-    this->last = NULL;
+    this->head = NULL;
+    this->tail = NULL;
     this->length = 0;
 
     return this;
 }
 
 void list_destroy(struct list *this) {
-    struct node *node = this->first;
+    struct node *node = this->head;
     while (node) {
         struct node *next = node->next;
         free(node);
         node = next;
     }
 
-    this->first = NULL;
-    this->last = NULL;
+    this->head = NULL;
+    this->tail = NULL;
     this->length = 0;
 
     free(this);
@@ -38,14 +38,14 @@ bool list_push(struct list *this, void *item) {
     node->next = NULL;
     node->value = item;
 
-    if (!this->first) {
-        this->first = node;
+    if (!this->head) {
+        this->head = node;
     }
 
-    if (this->last) {
-        this->last->next = node;
+    if (this->tail) {
+        this->tail->next = node;
     }
-    this->last = node;
+    this->tail = node;
 
     this->length++;
     return true;

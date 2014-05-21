@@ -10,8 +10,8 @@ struct node {
 };
 
 struct list {
-    struct node *first;
-    struct node *last;
+    struct node *head;
+    struct node *tail;
     size_t length;
 };
 
