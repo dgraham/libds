@@ -8,34 +8,46 @@ struct list *list_create() {
         return NULL;
     }
 
-    this->nodes = NULL;
+    this->first = NULL;
+    this->last = NULL;
     this->length = 0;
-    this->capacity = 0;
-
-    if (!resize(this, 16)) {
-        list_destroy(this);
-        return NULL;
-    }
 
     return this;
 }
 
 void list_destroy(struct list *this) {
+    struct node *node = this->first;
+    while (node) {
+        struct node *next = node->next;
+        free(node);
+        node = next;
+    }
+
+    this->first = NULL;
+    this->last = NULL;
     this->length = 0;
-    this->capacity = 0;
-    free(this->nodes);
+
     free(this);
 }
 
-bool resize(struct list *this, size_t capacity) {
-    void **nodes = realloc(this->nodes, capacity * sizeof(void *));
-    if (!nodes) {
+bool list_push(struct list *this, void *item) {
+    struct node *node = calloc(1, sizeof(struct node));
+    if (!node) {
         return false;
     }
+    node->next = NULL;
+    node->value = item;
 
-    this->nodes = nodes;
-    this->capacity = capacity;
+    if (!this->first) {
+        this->first = node;
+    }
 
+    if (this->last) {
+        this->last->next = node;
+    }
+    this->last = node;
+
+    this->length++;
     return true;
 }
 

@@ -4,15 +4,22 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+struct node {
+    void *value;
+    struct node *next;
+};
+
 struct list {
-    void **nodes;
+    struct node *first;
+    struct node *last;
     size_t length;
-    size_t capacity;
 };
 
 struct list *list_create();
 
 void list_destroy(struct list *this);
+
+bool list_push(struct list *this, void *item);
 
 #endif
 
