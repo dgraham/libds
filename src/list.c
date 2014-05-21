@@ -16,6 +16,11 @@ struct list *list_create() {
 }
 
 void list_destroy(struct list *this) {
+    list_clear(this);
+    free(this);
+}
+
+void list_clear(struct list *this) {
     struct node *node = this->head;
     while (node) {
         struct node *next = node->next;
@@ -26,8 +31,6 @@ void list_destroy(struct list *this) {
     this->head = NULL;
     this->tail = NULL;
     this->length = 0;
-
-    free(this);
 }
 
 bool list_push(struct list *this, void *item) {

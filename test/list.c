@@ -76,6 +76,28 @@ void test_pop() {
     list_destroy(list);
 }
 
+void test_clear() {
+    struct list *list = list_create();
+
+    char *item1 = "test1";
+    char *item2 = "test2";
+    list_push(list, item1);
+    list_push(list, item2);
+
+    list_clear(list);
+    assert(list->head == NULL, "head pointer is null");
+    assert(list->tail == NULL, "tail pointer is null");
+    assert(list->length == 0, "list is empty");
+
+    list_clear(list);
+    assert(list->head == NULL, "head pointer is still null");
+    assert(list->tail == NULL, "tail pointer is still null");
+    assert(list->length == 0, "list is still empty");
+
+    list_destroy(list);
+}
+
+
 int main(int argc, char *argv[]) {
     struct list *list = list_create();
     if (!list) {
@@ -85,6 +107,7 @@ int main(int argc, char *argv[]) {
     test_create();
     test_push();
     test_pop();
+    test_clear();
 
     list_destroy(list);
     return 0;
