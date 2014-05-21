@@ -53,3 +53,24 @@ bool list_push(struct list *this, void *item) {
     return true;
 }
 
+void *list_pop(struct list *this) {
+    struct node *node = this->tail;
+    if (!node) {
+        return NULL;
+    }
+
+    if (this->tail == this->head) {
+        this->tail = NULL;
+        this->head = NULL;
+    } else {
+        this->tail = this->tail->prev;
+        this->tail->next = NULL;
+    }
+
+    this->length--;
+
+    void *item = node->value;
+    free(node);
+    return item;
+}
+
