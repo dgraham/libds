@@ -40,6 +40,7 @@ void test_push() {
     assert(list->length == 2, "length is incremented");
     assert(list->last->value == item2, "stored item value");
     assert(list->first->next == list->last, "first item points to last item");
+    assert(list->last->next == NULL, "last item points to null");
 
     list_destroy(list);
 }
