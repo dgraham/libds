@@ -30,6 +30,7 @@ void test_push() {
     assert(list->tail == list->head, "tail pointer equals head");
     assert(list->length == 1, "length is incremented");
     assert(list->head->value == item1, "stored item value");
+    assert(list->head->prev == NULL, "head item has no previous item");
     assert(list->head->next == NULL, "head item has no next item");
 
     char *item2 = "test2";
@@ -41,6 +42,8 @@ void test_push() {
     assert(list->tail->value == item2, "stored item value");
     assert(list->head->next == list->tail, "head item points to tail item");
     assert(list->tail->next == NULL, "tail item points to null");
+    assert(list->tail->prev == list->head, "tail previous points to head");
+    assert(list->head->prev == NULL, "head has no previous node");
 
     list_destroy(list);
 }

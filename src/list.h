@@ -6,6 +6,7 @@
 
 struct node {
     void *value;
+    struct node *prev;
     struct node *next;
 };
 

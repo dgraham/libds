@@ -35,6 +35,7 @@ bool list_push(struct list *this, void *item) {
     if (!node) {
         return false;
     }
+    node->prev = NULL;
     node->next = NULL;
     node->value = item;
 
@@ -45,6 +46,7 @@ bool list_push(struct list *this, void *item) {
     if (this->tail) {
         this->tail->next = node;
     }
+    node->prev = this->tail;
     this->tail = node;
 
     this->length++;
