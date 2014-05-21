@@ -23,12 +23,23 @@ void test_create() {
 void test_push() {
     struct list *list = list_create();
 
-    char *item = "test";
-    assert(list_push(list, item), "item accepted");
+    char *item1 = "test1";
+    assert(list_push(list, item1), "first item accepted");
     assert(list->first != NULL, "first pointer is set");
+    assert(list->last != NULL, "last pointer is set");
     assert(list->last == list->first, "last pointer equals first");
     assert(list->length == 1, "length is incremented");
-    assert(list->first->value == item, "stored item value");
+    assert(list->first->value == item1, "stored item value");
+    assert(list->first->next == NULL, "first item has no next item");
+
+    char *item2 = "test2";
+    assert(list_push(list, item2), "second item accepted");
+    assert(list->first != NULL, "first pointer is set");
+    assert(list->last != NULL, "last pointer is set");
+    assert(list->last != list->first, "moved last pointer");
+    assert(list->length == 2, "length is incremented");
+    assert(list->last->value == item2, "stored item value");
+    assert(list->first->next == list->last, "first item points to last item");
 
     list_destroy(list);
 }
