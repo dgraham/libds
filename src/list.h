@@ -28,6 +28,8 @@ void *list_pop(struct list *this);
 
 bool list_unshift(struct list *this, void *item);
 
+void *list_shift(struct list *this);
+
 void list_clear(struct list *this);
 
 #endif

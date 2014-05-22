@@ -113,3 +113,24 @@ bool list_unshift(struct list *this, void *item) {
     this->length++;
     return true;
 }
+
+void *list_shift(struct list *this) {
+    struct node *node = this->head;
+    if (!node) {
+        return NULL;
+    }
+
+    if (this->tail == this->head) {
+        this->tail = NULL;
+        this->head = NULL;
+    } else {
+        this->head = this->head->next;
+        this->head->prev = NULL;
+    }
+
+    this->length--;
+
+    void *item = node->value;
+    free(node);
+    return item;
+}

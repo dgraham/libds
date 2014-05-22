@@ -105,6 +105,34 @@ void test_unshift() {
     list_destroy(list);
 }
 
+void test_shift() {
+    struct list *list = list_create();
+
+    char *item1 = "test1";
+    char *item2 = "test2";
+    list_push(list, item1);
+    list_push(list, item2);
+
+    assert(list_shift(list) == item1, "removed head item");
+    assert(list->head != NULL, "head pointer is set");
+    assert(list->tail != NULL, "tail pointer is set");
+    assert(list->tail == list->head, "tail pointer equals head");
+    assert(list->length == 1, "length is decremented");
+    assert(list->head->value == item2, "stored item value");
+    assert(list->head->prev == NULL, "head item has no previous item");
+    assert(list->head->next == NULL, "head item has no next item");
+
+    assert(list_shift(list) == item2, "removed tail item");
+    assert(list->head == NULL, "head pointer is null");
+    assert(list->tail == NULL, "tail pointer is null");
+    assert(list->length == 0, "list is empty");
+
+    assert(list_shift(list) == NULL, "shift empty list returned null");
+    assert(list->length == 0, "empty list length remains zero");
+
+    list_destroy(list);
+}
+
 void test_clone() {
     struct list *list = list_create();
 
@@ -158,6 +186,7 @@ int main(int argc, char *argv[]) {
     test_push();
     test_pop();
     test_unshift();
+    test_shift();
     test_clear();
     test_clone();
 
