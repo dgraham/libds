@@ -28,7 +28,10 @@ struct list *list_clone(struct list *this) {
 
     struct node *node = this->head;
     while (node) {
-        list_push(clone, node->value);
+        if (!list_push(clone, node->value)) {
+            list_destroy(clone);
+            return NULL;
+        }
         node = node->next;
     }
 
