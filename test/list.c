@@ -181,6 +181,38 @@ void test_clear() {
     list_destroy(list);
 }
 
+void test_iterator() {
+    struct list *list = list_create();
+
+    char *item1 = "test1";
+    char *item2 = "test2";
+    list_push(list, item1);
+    list_push(list, item2);
+
+    struct iterator *nodes = list_iterator(list);
+    assert(nodes->destroy != NULL, "has a destructor function");
+    assert(nodes->current == NULL, "starts with null item");
+    assert(nodes->index == 0, "starts at index 0");
+
+    void *first = nodes->next(nodes);
+    assert(first == item1, "returns first item");
+    assert(nodes->current == item1, "stores current item");
+    assert(nodes->index == 1, "increments index");
+
+    void *second = nodes->next(nodes);
+    assert(second == item2, "returns second item");
+    assert(nodes->current == item2, "stores current item");
+    assert(nodes->index == 2, "increments index");
+
+    void *third = nodes->next(nodes);
+    assert(third == NULL, "returns null when iteration is complete");
+    assert(nodes->current == NULL, "current item is null");
+    assert(nodes->index == 2, "does not increment index");
+
+    nodes->destroy(nodes);
+    list_destroy(list);
+}
+
 int main(int argc, char *argv[]) {
     test_create();
     test_push();
@@ -189,6 +221,7 @@ int main(int argc, char *argv[]) {
     test_shift();
     test_clear();
     test_clone();
+    test_iterator();
 
     return 0;
 }

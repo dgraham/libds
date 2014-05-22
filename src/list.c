@@ -134,3 +134,21 @@ void *list_shift(struct list *this) {
     free(node);
     return item;
 }
+
+void *next_node(struct iterator *this) {
+    struct node *node = this->iterable;
+
+    if (node) {
+        this->iterable = node->next;
+        this->current = node->value;
+        this->index++;
+    } else {
+        this->current = NULL;
+    }
+
+    return this->current;
+}
+
+struct iterator *list_iterator(struct list *this) {
+    return iterator_create(this->head, next_node);
+}

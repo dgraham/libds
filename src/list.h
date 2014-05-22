@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
+#include "iterator.h"
 
 struct node {
     void *value;
@@ -31,5 +32,7 @@ bool list_unshift(struct list *this, void *item);
 void *list_shift(struct list *this);
 
 void list_clear(struct list *this);
+
+struct iterator *list_iterator(struct list *this);
 
 #endif
