@@ -1,6 +1,8 @@
 #ifndef ITERATOR_H
 #define ITERATOR_H
 
+#include <stdlib.h>
+
 struct iterator {
     size_t index;
     void *iterable;
