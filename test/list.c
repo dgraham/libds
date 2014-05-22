@@ -160,6 +160,31 @@ void test_clone() {
     list_destroy(list);
 }
 
+void test_concat() {
+    struct list *list1 = list_create();
+    struct list *list2 = list_create();
+
+    char *item1 = "test1";
+    char *item2 = "test2";
+    list_push(list1, item1);
+    list_push(list1, item2);
+
+    char *item3 = "test3";
+    char *item4 = "test4";
+    list_push(list2, item3);
+    list_push(list2, item4);
+
+    assert(list_concat(list1, list2), "concatenation succeeded");
+    assert(list1->length == 4, "incremented length");
+    assert(list2->length == 2, "source list length unchanged");
+
+    list_push(list1, item4);
+    assert(list2->tail->next == NULL, "push only adds to one list");
+
+    list_destroy(list1);
+    list_destroy(list2);
+}
+
 void test_clear() {
     struct list *list = list_create();
 
@@ -221,6 +246,7 @@ int main(int argc, char *argv[]) {
     test_shift();
     test_clear();
     test_clone();
+    test_concat();
     test_iterator();
 
     return 0;

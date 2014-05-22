@@ -51,6 +51,18 @@ void list_clear(struct list *this) {
     this->length = 0;
 }
 
+bool list_concat(struct list *this, struct list *other) {
+    struct node *node = other->head;
+    while (node) {
+        if (!list_push(this, node->value)) {
+            return false;
+        }
+        node = node->next;
+    }
+
+    return true;
+}
+
 bool list_push(struct list *this, void *item) {
     struct node *node = calloc(1, sizeof(struct node));
     if (!node) {

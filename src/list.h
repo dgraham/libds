@@ -23,6 +23,8 @@ void list_destroy(struct list *this);
 
 struct list *list_clone(struct list *this);
 
+bool list_concat(struct list *this, struct list *other);
+
 bool list_push(struct list *this, void *item);
 
 void *list_pop(struct list *this);
