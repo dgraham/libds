@@ -91,3 +91,25 @@ void *list_pop(struct list *this) {
     free(node);
     return item;
 }
+
+bool list_unshift(struct list *this, void *item) {
+    struct node *node = calloc(1, sizeof(struct node));
+    if (!node) {
+        return false;
+    }
+    node->prev = NULL;
+    node->next = this->head;
+    node->value = item;
+
+    if (this->head) {
+        this->head->prev = node;
+    }
+    this->head = node;
+
+    if (!this->tail) {
+        this->tail = node;
+    }
+
+    this->length++;
+    return true;
+}

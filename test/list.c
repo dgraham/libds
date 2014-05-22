@@ -76,6 +76,35 @@ void test_pop() {
     list_destroy(list);
 }
 
+void test_unshift() {
+    struct list *list = list_create();
+
+    char *item1 = "test1";
+    assert(list_unshift(list, item1), "first item accepted");
+    assert(list->head != NULL, "head pointer is set");
+    assert(list->tail != NULL, "tail pointer is set");
+    assert(list->tail == list->head, "tail pointer equals head");
+    assert(list->length == 1, "length is incremented");
+    assert(list->head->value == item1, "stored item value");
+    assert(list->head->prev == NULL, "head item has no previous item");
+    assert(list->head->next == NULL, "head item has no next item");
+
+    char *item2 = "test2";
+    assert(list_unshift(list, item2), "second item accepted");
+    assert(list->head != NULL, "head pointer is set");
+    assert(list->tail != NULL, "tail pointer is set");
+    assert(list->tail != list->head, "moved tail pointer");
+    assert(list->length == 2, "length is incremented");
+    assert(list->tail->value == item1, "first item is now last");
+    assert(list->head->value == item2, "second item is now first");
+    assert(list->head->next == list->tail, "head item points to tail item");
+    assert(list->tail->next == NULL, "tail item points to null");
+    assert(list->tail->prev == list->head, "tail previous points to head");
+    assert(list->head->prev == NULL, "head has no previous node");
+
+    list_destroy(list);
+}
+
 void test_clone() {
     struct list *list = list_create();
 
@@ -128,6 +157,7 @@ int main(int argc, char *argv[]) {
     test_create();
     test_push();
     test_pop();
+    test_unshift();
     test_clear();
     test_clone();
 
