@@ -20,6 +20,21 @@ void list_destroy(struct list *this) {
     free(this);
 }
 
+struct list *list_clone(struct list *this) {
+    struct list *clone = list_create();
+    if (!clone) {
+        return NULL;
+    }
+
+    struct node *node = this->head;
+    while (node) {
+        list_push(clone, node->value);
+        node = node->next;
+    }
+
+    return clone;
+}
+
 void list_clear(struct list *this) {
     struct node *node = this->head;
     while (node) {
@@ -76,4 +91,3 @@ void *list_pop(struct list *this) {
     free(node);
     return item;
 }
-

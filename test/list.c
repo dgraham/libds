@@ -76,6 +76,33 @@ void test_pop() {
     list_destroy(list);
 }
 
+void test_clone() {
+    struct list *list = list_create();
+
+    char *item1 = "test1";
+    char *item2 = "test2";
+    list_push(list, item1);
+    list_push(list, item2);
+
+    struct list *clone = list_clone(list);
+    assert(clone->length == 2, "length matches source");
+    assert(clone->head != NULL, "head pointer is set");
+    assert(clone->tail != NULL, "tail pointer is set");
+    assert(clone->head->value == item1, "stored first item value");
+    assert(clone->tail->value == item2, "stored second item value");
+    assert(clone->head->prev == NULL, "head item has no previous item");
+    assert(clone->head->next == clone->tail, "head item points to tail");
+
+    assert(clone->head != list->head, "head node is unique");
+    assert(clone->tail != list->tail, "tail node is unique");
+
+    assert(list_pop(list) == item2, "original list unchanged by clone");
+    assert(list->length == 1, "length of original changed");
+    assert(clone->length == 2, "length of clone did not change");
+
+    list_destroy(list);
+}
+
 void test_clear() {
     struct list *list = list_create();
 
@@ -97,19 +124,12 @@ void test_clear() {
     list_destroy(list);
 }
 
-
 int main(int argc, char *argv[]) {
-    struct list *list = list_create();
-    if (!list) {
-        exit(1);
-    }
-
     test_create();
     test_push();
     test_pop();
     test_clear();
+    test_clone();
 
-    list_destroy(list);
     return 0;
 }
-
