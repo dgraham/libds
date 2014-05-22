@@ -148,7 +148,7 @@ void *list_shift(struct list *this) {
     return item;
 }
 
-void *next_node(struct iterator *this) {
+void *list_next_node(struct iterator *this) {
     struct node *node = this->iterable;
 
     if (node) {
@@ -163,5 +163,5 @@ void *next_node(struct iterator *this) {
 }
 
 struct iterator *list_iterator(struct list *this) {
-    return iterator_create(this->head, next_node);
+    return iterator_create(this->head, list_next_node);
 }
