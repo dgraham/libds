@@ -1,7 +1,5 @@
 #include "list.h"
 
-bool resize(struct list *this, size_t capacity);
-
 struct list *list_create() {
     struct list *this = calloc(1, sizeof(struct list));
     if (!this) {
