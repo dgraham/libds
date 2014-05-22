@@ -17,7 +17,7 @@ struct list {
     size_t length;
 };
 
-struct list *list_create();
+struct list *list_create(void);
 
 void list_destroy(struct list *this);
 
