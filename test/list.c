@@ -238,7 +238,7 @@ void test_iterator() {
     list_destroy(list);
 }
 
-int main(int argc, char *argv[]) {
+int main() {
     test_create();
     test_push();
     test_pop();
