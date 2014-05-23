@@ -1,5 +1,7 @@
 #include "list.h"
 
+void *list_next_node(struct iterator *this);
+
 struct list *list_create() {
     struct list *this = calloc(1, sizeof(struct list));
     if (!this) {
