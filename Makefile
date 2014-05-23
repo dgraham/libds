@@ -16,7 +16,6 @@ test: $(TESTX)
 
 test-%: test/%.c $(OBJECTS)
 	cc $(CFLAGS) $< $(OBJECTS) -o $@
-	./$@
 
 clean:
 	rm -f $(OBJECTS)
