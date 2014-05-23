@@ -26,7 +26,7 @@ struct list *list_clone(struct list *this) {
         return NULL;
     }
 
-    struct node *node = this->head;
+    struct lnode *node = this->head;
     while (node) {
         if (!list_push(clone, node->value)) {
             list_destroy(clone);
@@ -39,9 +39,9 @@ struct list *list_clone(struct list *this) {
 }
 
 void list_clear(struct list *this) {
-    struct node *node = this->head;
+    struct lnode *node = this->head;
     while (node) {
-        struct node *next = node->next;
+        struct lnode *next = node->next;
         free(node);
         node = next;
     }
@@ -52,7 +52,7 @@ void list_clear(struct list *this) {
 }
 
 bool list_concat(struct list *this, struct list *other) {
-    struct node *node = other->head;
+    struct lnode *node = other->head;
     while (node) {
         if (!list_push(this, node->value)) {
             return false;
@@ -64,7 +64,7 @@ bool list_concat(struct list *this, struct list *other) {
 }
 
 bool list_push(struct list *this, void *item) {
-    struct node *node = calloc(1, sizeof(struct node));
+    struct lnode *node = calloc(1, sizeof(struct lnode));
     if (!node) {
         return false;
     }
@@ -87,7 +87,7 @@ bool list_push(struct list *this, void *item) {
 }
 
 void *list_pop(struct list *this) {
-    struct node *node = this->tail;
+    struct lnode *node = this->tail;
     if (!node) {
         return NULL;
     }
@@ -108,7 +108,7 @@ void *list_pop(struct list *this) {
 }
 
 bool list_unshift(struct list *this, void *item) {
-    struct node *node = calloc(1, sizeof(struct node));
+    struct lnode *node = calloc(1, sizeof(struct lnode));
     if (!node) {
         return false;
     }
@@ -130,7 +130,7 @@ bool list_unshift(struct list *this, void *item) {
 }
 
 void *list_shift(struct list *this) {
-    struct node *node = this->head;
+    struct lnode *node = this->head;
     if (!node) {
         return NULL;
     }
@@ -151,7 +151,7 @@ void *list_shift(struct list *this) {
 }
 
 void *list_next_node(struct iterator *this) {
-    struct node *node = this->iterable;
+    struct lnode *node = this->iterable;
 
     if (node) {
         this->iterable = node->next;

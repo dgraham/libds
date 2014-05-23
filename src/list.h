@@ -5,15 +5,15 @@
 #include <stdbool.h>
 #include "iterator.h"
 
-struct node {
+struct lnode {
     void *value;
-    struct node *prev;
-    struct node *next;
+    struct lnode *prev;
+    struct lnode *next;
 };
 
 struct list {
-    struct node *head;
-    struct node *tail;
+    struct lnode *head;
+    struct lnode *tail;
     size_t length;
 };
 
