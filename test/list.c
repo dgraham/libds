@@ -1,7 +1,17 @@
 #include <stdlib.h>
 #include <stdio.h>
-
 #include "list.h"
+
+void assert(bool success, const char *message);
+void test_create(void);
+void test_push(void);
+void test_pop(void);
+void test_unshift(void);
+void test_shift(void);
+void test_clone(void);
+void test_concat(void);
+void test_clear(void);
+void test_iterator(void);
 
 void assert(bool success, const char *message) {
     if (!success) {
