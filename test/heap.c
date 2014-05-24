@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "heap.h"
 
 void assert(bool success, const char *message);
@@ -14,7 +15,7 @@ void assert(bool success, const char *message) {
 }
 
 int compare_nodes(const void *a, const void *b) {
-    return a == b ? 0 : -1;
+    return strcmp(a, b);
 }
 
 void test_create() {
