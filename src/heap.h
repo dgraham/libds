@@ -26,4 +26,6 @@ void *heap_pop(struct heap *this);
 
 bool heap_merge(struct heap *this, struct heap *other);
 
+struct iterator *heap_iterator(struct heap *this);
+
 #endif

@@ -11,6 +11,7 @@ void test_pop(void);
 void test_clear(void);
 void test_clone(void);
 void test_merge(void);
+void test_iterator(void);
 
 void assert(bool success, const char *message) {
     if (!success) {
@@ -144,6 +145,35 @@ void test_merge() {
     heap_destroy(heap2);
 }
 
+void test_iterator() {
+    struct heap *heap = heap_create(compare_nodes);
+
+    char *a = "test 1";
+    char *b = "test 2";
+    heap_push(heap, b);
+    heap_push(heap, a);
+
+    struct iterator *nodes = heap_iterator(heap);
+    assert(nodes->destroy != NULL, "has a destructor function");
+    assert(nodes->current == NULL, "starts with null item");
+    assert(nodes->index == 0, "starts at index 0");
+
+    assert(nodes->next(nodes) == a, "returns first item");
+    assert(nodes->current == a, "stores current item");
+    assert(nodes->index == 0, "first iteration is index zero");
+
+    assert(nodes->next(nodes) == b, "returns second item");
+    assert(nodes->current == b, "stores current item");
+    assert(nodes->index == 1, "increments index");
+
+    assert(nodes->next(nodes) == NULL, "returns null when iteration is complete");
+    assert(nodes->current == NULL, "current item is null");
+    assert(nodes->index == 1, "does not increment index");
+
+    nodes->destroy(nodes);
+    heap_destroy(heap);
+}
+
 int main() {
     test_create();
     test_push();
@@ -151,6 +181,7 @@ int main() {
     test_clear();
     test_clone();
     test_merge();
+    test_iterator();
 
     return 0;
 }

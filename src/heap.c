@@ -3,6 +3,8 @@
 
 void heap_move_up(struct heap *this, size_t k);
 void heap_move_down(struct heap *this, size_t k);
+void *heap_next_node(struct iterator *this);
+void heap_destroy_iterator(struct iterator *this);
 bool heap_resize(struct heap *this, size_t capacity);
 
 /* Allocate memory for a new heap instance. Depending on the comparator
@@ -156,6 +158,75 @@ bool heap_merge(struct heap *this, struct heap *other) {
     }
 
     return true;
+}
+
+/* Create an external iterator with which to loop over each item in the heap
+ * in sorted order. The caller must free the iterator's memory when iteration
+ * is complete.
+ *
+ * Because heap iteration is a destructive process, items must be popped from
+ * the heap to maintain total ordering, the iterator allocates a cloned heap
+ * through which to iterate. The clone is deallocated through the iterator's
+ * `destroy` function.
+ *
+ * this - The heap to iterate through.
+ *
+ * Examples
+ *
+ *   struct iterator *nodes = heap_iterator(heap);
+ *   while (nodes->next(nodes)) {
+ *       char *name = nodes->current;
+ *       printf("%s\n", name);
+ *   }
+ *   nodes->destroy(nodes);
+ *
+ * Returns an iterator or null if memory allocation failed.
+ */
+struct iterator *heap_iterator(struct heap *this) {
+    struct heap *clone = heap_clone(this);
+    if (!clone) {
+        return NULL;
+    }
+
+    struct iterator *nodes = iterator_create(clone, heap_next_node);
+    if (!nodes) {
+        heap_destroy(clone);
+        return NULL;
+    }
+
+    nodes->destroy = heap_destroy_iterator;
+    return nodes;
+}
+
+/* Private: Free the iterator's memory, including the cloned heap through
+ * which it was navigating. This is the function pointer used to implement
+ * `iter->destroy(iter)`.
+ *
+ * this - The iterator to destroy.
+ *
+ * Returns nothing.
+ */
+void heap_destroy_iterator(struct iterator *this) {
+    heap_destroy(this->iterable);
+    iterator_destroy(this);
+}
+
+/* Private: Move the iterator to the next node. This is the function pointer
+ * used to implement `iter->next(iter)`.
+ *
+ * this - The iterator to advance.
+ *
+ * Returns the next item or null if the heap is empty.
+ */
+void *heap_next_node(struct iterator *this) {
+    struct heap *heap = this->iterable;
+
+    if (this->current) {
+        this->index++;
+    }
+
+    this->current = heap_pop(heap);
+    return this->current;
 }
 
 /* Private: Move the last element in the heap up until it's in sorted order.
