@@ -37,11 +37,14 @@ void test_push() {
     char *a = "test 1";
     char *b = "test 2";
 
-    assert(heap_push(heap, a), "item pushed");
+    assert(heap_push(heap, b), "max item pushed");
     assert(heap->size == 1, "incremented size");
+    assert(heap->nodes[0] == b, "root node is max item");
 
-    assert(heap_push(heap, b), "item pushed");
+    assert(heap_push(heap, a), "min item pushed");
     assert(heap->size == 2, "incremented size");
+    assert(heap->nodes[0] == a, "root node is min item");
+    assert(heap->nodes[1] == b, "root node + 1 is max item");
 
     heap_destroy(heap);
 }
