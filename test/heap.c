@@ -7,6 +7,7 @@ void assert(bool success, const char *message);
 int compare_nodes(const void *a, const void *b);
 void test_create(void);
 void test_push(void);
+void test_pop(void);
 
 void assert(bool success, const char *message) {
     if (!success) {
@@ -41,6 +42,27 @@ void test_push() {
 
     assert(heap_push(heap, b), "item pushed");
     assert(heap->size == 2, "incremented size");
+
+    heap_destroy(heap);
+}
+
+void test_pop() {
+    struct heap *heap = heap_create(compare_nodes);
+
+    char *a = "test 1";
+    char *b = "test 2";
+
+    heap_push(heap, a);
+    heap_push(heap, b);
+
+    assert(heap_pop(heap) == b, "item popped");
+    assert(heap->size == 1, "decremented size");
+
+    assert(heap_pop(heap) == a, "item popped");
+    assert(heap->size == 0, "decremented size");
+
+    assert(heap_pop(heap) == NULL, "popped null when empty");
+    assert(heap->size == 0, "size still zero when empty");
 
     heap_destroy(heap);
 }

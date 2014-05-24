@@ -18,4 +18,6 @@ void heap_destroy(struct heap *this);
 
 bool heap_push(struct heap *this, void *item);
 
+void *heap_pop(struct heap *this);
+
 #endif

@@ -2,6 +2,7 @@
 #include "heap.h"
 
 void heap_move_up(struct heap *this, size_t k);
+void heap_move_down(struct heap *this, size_t k);
 bool heap_resize(struct heap *this, size_t capacity);
 
 /* Allocate memory for a new heap instance. Depending on the comparator
@@ -70,6 +71,26 @@ bool heap_push(struct heap *this, void *item) {
     return true;
 }
 
+/* Remove the root item from the heap. The remaining items are sorted into place
+ * with the heap's comparator function.
+ *
+ * heap - The heap from which to remove the item.
+ *
+ * Returns the item or null if the heap is empty.
+ */
+void *heap_pop(struct heap *this) {
+    if (this->size == 0) {
+        return NULL;
+    }
+
+    void *root = this->nodes[0];
+    this->nodes[0] = this->nodes[this->size - 1];
+    this->size--;
+    heap_move_down(this, 0);
+
+    return root;
+}
+
 /* Private: Move the last element in the heap up until it's in sorted order.
  *
  * this - The heap to fix up.
@@ -88,6 +109,34 @@ void heap_move_up(struct heap *this, size_t k) {
         this->nodes[k] = this->nodes[parent];
         this->nodes[parent] = temp;
         heap_move_up(this, parent);
+    }
+}
+
+/* Private: Move the root element down in the heap until it's in sorted order.
+ *
+ * this - The heap to fix up.
+ * k    - The node to move down the heap until it's in position.
+ *
+ * Returns nothing.
+ */
+void heap_move_down(struct heap *this, size_t k) {
+    size_t left  = 2 * k + 1;
+    size_t right = 2 * k + 2;
+    if (left > (this->size - 1)) {
+        return;
+    }
+
+    size_t smaller = left;
+    if (right < this->size &&
+            this->comparator(this->nodes[right], this->nodes[left]) < 0) {
+        smaller = right;
+    }
+
+    if (this->comparator(this->nodes[k], this->nodes[smaller]) > 0) {
+        void *temp = this->nodes[k];
+        this->nodes[k] = this->nodes[smaller];
+        this->nodes[smaller] = temp;
+        heap_move_down(this, smaller);
     }
 }
 
