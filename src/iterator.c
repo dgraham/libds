@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include "iterator.h"
 
 struct iterator *iterator_create(void *iterable, void *(*next)(struct iterator *)) {
