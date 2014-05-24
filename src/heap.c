@@ -1,6 +1,7 @@
 #include <string.h>
 #include "heap.h"
 
+void heap_move_up(struct heap *this, size_t k);
 bool heap_resize(struct heap *this, size_t capacity);
 
 /* Allocate memory for a new heap instance. Depending on the comparator
@@ -45,6 +46,49 @@ void heap_destroy(struct heap *this) {
     this->comparator = NULL;
     free(this->nodes);
     free(this);
+}
+
+/* Add a new item to the heap. The item will be sorted into position according
+ * to the heap's comparator function.
+ *
+ * this - The heap onto which to push the item.
+ * item - The data item to store
+ *
+ * Returns true if the item was added or false if memory allocation failed.
+ */
+bool heap_push(struct heap *this, void *item) {
+    if (this->size == this->capacity) {
+        if (!heap_resize(this, this->capacity * 2)) {
+            return false;
+        }
+    }
+
+    this->nodes[this->size] = item;
+    this->size++;
+    heap_move_up(this, this->size - 1);
+
+    return true;
+}
+
+/* Private: Move the last element in the heap up until it's in sorted order.
+ *
+ * this - The heap to fix up.
+ * k    - The node to sort up the heap until it's in position.
+ *
+ * Returns nothing.
+ */
+void heap_move_up(struct heap *this, size_t k) {
+    if (k == 0) {
+        return;
+    }
+
+    size_t parent = (k - 1) / 2;
+    if (this->comparator(this->nodes[k], this->nodes[parent]) < 0) {
+        void *temp = this->nodes[k];
+        this->nodes[k] = this->nodes[parent];
+        this->nodes[parent] = temp;
+        heap_move_up(this, parent);
+    }
 }
 
 /* Private: Allocate memory used to store heap node pointers.
