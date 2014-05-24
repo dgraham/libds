@@ -49,6 +49,22 @@ void heap_destroy(struct heap *this) {
     free(this);
 }
 
+/* Remove all entries from the heap. This does not free the values stored in
+ * the heap. The caller is responsible for deallocating the value pointers.
+ *
+ * The heap's memory is not resized after clearing the entries. It consumes
+ * the same amount of memory as it did before a call to this function. Adding
+ * entries to a cleared heap avoids the cost of memory allocation.
+ *
+ * this - The heap to clear.
+ *
+ * Returns nothing.
+ */
+void heap_clear(struct heap *this) {
+    memset(this->nodes, 0, this->capacity * sizeof(void *));
+    this->size = 0;
+}
+
 /* Add a new item to the heap. The item will be sorted into position according
  * to the heap's comparator function.
  *

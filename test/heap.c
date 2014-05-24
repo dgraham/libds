@@ -8,6 +8,7 @@ int compare_nodes(const void *a, const void *b);
 void test_create(void);
 void test_push(void);
 void test_pop(void);
+void test_clear(void);
 
 void assert(bool success, const char *message) {
     if (!success) {
@@ -72,10 +73,28 @@ void test_pop() {
     heap_destroy(heap);
 }
 
+void test_clear() {
+    struct heap *heap = heap_create(compare_nodes);
+
+    char *a = "test 1";
+    char *b = "test 2";
+
+    heap_push(heap, a);
+    heap_push(heap, b);
+
+    heap_clear(heap);
+
+    assert(heap->nodes[0] == NULL, "root node is null");
+    assert(heap->size == 0, "heap is empty");
+
+    heap_destroy(heap);
+}
+
 int main() {
     test_create();
     test_push();
     test_pop();
+    test_clear();
 
     return 0;
 }
