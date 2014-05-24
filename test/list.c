@@ -152,6 +152,9 @@ void test_clone() {
     list_push(list, item2);
 
     struct list *clone = list_clone(list);
+    assert(clone != NULL, "clone allocated memory");
+    assert(clone != list, "clone is not same as original");
+
     assert(clone->length == 2, "length matches source");
     assert(clone->head != NULL, "head pointer is set");
     assert(clone->tail != NULL, "tail pointer is set");
