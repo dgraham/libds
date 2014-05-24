@@ -55,14 +55,16 @@ void test_pop() {
     char *a = "test 1";
     char *b = "test 2";
 
-    heap_push(heap, a);
     heap_push(heap, b);
+    heap_push(heap, a);
 
-    assert(heap_pop(heap) == b, "item popped");
+    assert(heap_pop(heap) == a, "min item popped");
     assert(heap->size == 1, "decremented size");
+    assert(heap->nodes[0] == b, "root node is last item");
 
-    assert(heap_pop(heap) == a, "item popped");
+    assert(heap_pop(heap) == b, "last item popped");
     assert(heap->size == 0, "decremented size");
+    assert(heap->nodes[0] == NULL, "root node is null");
 
     assert(heap_pop(heap) == NULL, "popped null when empty");
     assert(heap->size == 0, "size still zero when empty");
