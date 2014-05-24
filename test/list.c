@@ -168,6 +168,7 @@ void test_clone() {
     assert(clone->length == 2, "length of clone did not change");
 
     list_destroy(list);
+    list_destroy(clone);
 }
 
 void test_concat() {
