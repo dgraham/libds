@@ -10,6 +10,7 @@ void test_push(void);
 void test_pop(void);
 void test_clear(void);
 void test_clone(void);
+void test_merge(void);
 
 void assert(bool success, const char *message) {
     if (!success) {
@@ -111,12 +112,45 @@ void test_clone() {
     heap_destroy(clone);
 }
 
+void test_merge() {
+    struct heap *heap1 = heap_create(compare_nodes);
+    struct heap *heap2 = heap_create(compare_nodes);
+
+    char *a = "test 1";
+    char *b = "test 2";
+    heap_push(heap1, a);
+    heap_push(heap1, b);
+
+    char *c = "test 3";
+    char *d = "test 4";
+    heap_push(heap2, c);
+    heap_push(heap2, d);
+
+    assert(heap_merge(heap1, heap2), "merged");
+    assert(heap1->size == 4, "incremented size");
+    assert(heap2->size == 2, "source heap size unchanged");
+
+    assert(heap_pop(heap1) == a, "popped first");
+    assert(heap_pop(heap1) == b, "popped second");
+    assert(heap_pop(heap1) == c, "popped third");
+    assert(heap_pop(heap1) == d, "popped fourth");
+    assert(heap_pop(heap1) == NULL, "heap1 is empty");
+
+    assert(heap_pop(heap2) == c, "popped first");
+    assert(heap_pop(heap2) == d, "popped second");
+    assert(heap_pop(heap2) == NULL, "heap2 is empty");
+
+    heap_destroy(heap1);
+    heap_destroy(heap2);
+}
+
 int main() {
     test_create();
     test_push();
     test_pop();
     test_clear();
     test_clone();
+    test_merge();
 
     return 0;
 }

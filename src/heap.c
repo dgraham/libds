@@ -132,6 +132,32 @@ void *heap_pop(struct heap *this) {
     return root;
 }
 
+/* Combine one heap into another. The destination heap sorts new nodes into
+ * place to maintain its total ordering. The source heap is unaffected by the
+ * merge. It contains the same items after merging.
+ *
+ * this  - The destination heap
+ * other - The source heap.
+ *
+ * Returns true if the heaps were merged, false if memory allocation failed.
+ */
+bool heap_merge(struct heap *this, struct heap *other) {
+    size_t total = this->size + other->size;
+    if (total > this->capacity) {
+        if (!heap_resize(this, total)) {
+            return false;
+        }
+    }
+
+    for (size_t i = 0; i < other->size; i++) {
+        if (!heap_push(this, other->nodes[i])) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 /* Private: Move the last element in the heap up until it's in sorted order.
  *
  * this - The heap to fix up.

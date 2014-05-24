@@ -24,4 +24,6 @@ bool heap_push(struct heap *this, void *item);
 
 void *heap_pop(struct heap *this);
 
+bool heap_merge(struct heap *this, struct heap *other);
+
 #endif
