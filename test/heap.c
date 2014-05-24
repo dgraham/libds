@@ -86,6 +86,7 @@ void test_clear() {
 
     assert(heap->nodes[0] == NULL, "root node is null");
     assert(heap->size == 0, "heap is empty");
+    assert(heap->capacity > 0, "still has capacity");
 
     heap_destroy(heap);
 }
