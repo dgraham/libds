@@ -16,6 +16,8 @@ struct heap *heap_create(int (*comparator)(const void *, const void *));
 
 void heap_destroy(struct heap *this);
 
+struct heap *heap_clone(struct heap *this);
+
 void heap_clear(struct heap *this);
 
 bool heap_push(struct heap *this, void *item);

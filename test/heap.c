@@ -9,6 +9,7 @@ void test_create(void);
 void test_push(void);
 void test_pop(void);
 void test_clear(void);
+void test_clone(void);
 
 void assert(bool success, const char *message) {
     if (!success) {
@@ -55,7 +56,6 @@ void test_pop() {
 
     char *a = "test 1";
     char *b = "test 2";
-
     heap_push(heap, b);
     heap_push(heap, a);
 
@@ -78,7 +78,6 @@ void test_clear() {
 
     char *a = "test 1";
     char *b = "test 2";
-
     heap_push(heap, a);
     heap_push(heap, b);
 
@@ -91,11 +90,33 @@ void test_clear() {
     heap_destroy(heap);
 }
 
+void test_clone() {
+    struct heap *heap = heap_create(compare_nodes);
+
+    char *a = "test 1";
+    char *b = "test 2";
+    heap_push(heap, a);
+    heap_push(heap, b);
+
+    struct heap *clone = heap_clone(heap);
+    assert(clone != NULL, "clone allocated memory");
+    assert(clone != heap, "clone is not same as original");
+    assert(clone->size == 2, "size matches source");
+
+    assert(heap_pop(clone) == a, "original heap unchanged by clone");
+    assert(clone->size == 1, "size of clone changed");
+    assert(heap->size == 2, "size of original did not change");
+
+    heap_destroy(heap);
+    heap_destroy(clone);
+}
+
 int main() {
     test_create();
     test_push();
     test_pop();
     test_clear();
+    test_clone();
 
     return 0;
 }

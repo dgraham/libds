@@ -49,6 +49,31 @@ void heap_destroy(struct heap *this) {
     free(this);
 }
 
+/* Copy the heap contents into a new heap. Modifications to either heap
+ * will not affect the other. However, they both point to the same values.
+ *
+ * this - The heap whose entries will be cloned.
+ *
+ * Returns the cloned heap or null if memory allocation failed.
+ */
+struct heap *heap_clone(struct heap *this) {
+    struct heap *clone = heap_create(this->comparator);
+    if (!clone) {
+        return NULL;
+    }
+
+    if (clone->capacity < this->size) {
+        if (!heap_resize(clone, this->size)) {
+            heap_destroy(clone);
+            return NULL;
+        }
+    }
+
+    memcpy(clone->nodes, this->nodes, this->size * sizeof(void *));
+    clone->size = this->size;
+    return clone;
+}
+
 /* Remove all entries from the heap. This does not free the values stored in
  * the heap. The caller is responsible for deallocating the value pointers.
  *
