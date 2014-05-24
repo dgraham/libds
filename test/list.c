@@ -166,9 +166,9 @@ void test_clone() {
     assert(clone->head != list->head, "head node is unique");
     assert(clone->tail != list->tail, "tail node is unique");
 
-    assert(list_pop(list) == item2, "original list unchanged by clone");
-    assert(list->length == 1, "length of original changed");
-    assert(clone->length == 2, "length of clone did not change");
+    assert(list_pop(clone) == item2, "original list unchanged by clone");
+    assert(clone->length == 1, "length of clone changed");
+    assert(list->length == 2, "length of original did not change");
 
     list_destroy(list);
     list_destroy(clone);
