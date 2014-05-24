@@ -70,6 +70,7 @@ void test_pop() {
 int main() {
     test_create();
     test_push();
+    test_pop();
 
     return 0;
 }
