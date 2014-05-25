@@ -170,6 +170,9 @@ void test_iterator() {
     assert(nodes->current == NULL, "current item is null");
     assert(nodes->index == 1, "does not increment index");
 
+    assert(heap->size == 2, "heap size unchanged after iteration");
+    assert(heap->nodes[0] == a, "heap nodes unchanged after iteration");
+
     nodes->destroy(nodes);
     heap_destroy(heap);
 }
