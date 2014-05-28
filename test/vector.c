@@ -6,6 +6,7 @@ void assert(bool success, const char *message);
 void test_create(void);
 void test_push(void);
 void test_pop(void);
+void test_clear(void);
 
 void assert(bool success, const char *message) {
     if (!success) {
@@ -59,10 +60,29 @@ void test_pop() {
     vector_destroy(vector);
 }
 
+void test_clear() {
+    struct vector *vector = vector_create();
+
+    char *a = "item1";
+    char *b = "item2";
+    vector_push(vector, a);
+    vector_push(vector, b);
+
+    vector_clear(vector);
+
+    assert(vector->length == 0, "vector is empty");
+    assert(vector->items[0] == NULL, "cleared first item pointer");
+    assert(vector->items[1] == NULL, "cleared last item pointer");
+    assert(vector->capacity > 0, "still has capacity");
+
+    vector_destroy(vector);
+}
+
 int main() {
     test_create();
     test_push();
     test_pop();
+    test_clear();
 
     return 0;
 }

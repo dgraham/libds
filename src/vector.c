@@ -40,6 +40,19 @@ void vector_destroy(struct vector *this) {
     free(this);
 }
 
+/* Remove all items from a vector. The items themselves are not freed. The
+ * caller must free the data items. The vector does not resize after removing
+ * the items. The memory is still allocated for future inserts.
+ *
+ * this - The vector to clear.
+ *
+ * Returns nothing.
+ */
+void vector_clear(struct vector *this) {
+    memset(this->items, 0, this->capacity * sizeof(void *));
+    this->length = 0;
+}
+
 /* Add an item to the end of the vector. Expands the vector's capacity to
  * store the additional data.
  *
