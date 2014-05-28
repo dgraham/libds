@@ -7,6 +7,7 @@ void test_create(void);
 void test_push(void);
 void test_pop(void);
 void test_clear(void);
+void test_clone(void);
 
 void assert(bool success, const char *message) {
     if (!success) {
@@ -78,11 +79,33 @@ void test_clear() {
     vector_destroy(vector);
 }
 
+void test_clone() {
+    struct vector *vector = vector_create();
+
+    char *a = "item1";
+    char *b = "item2";
+    vector_push(vector, a);
+    vector_push(vector, b);
+
+    struct vector *clone = vector_clone(vector);
+    assert(clone != NULL, "clone allocated memory");
+    assert(clone != vector, "clone is not same as original");
+    assert(clone->length == 2, "length matches source");
+
+    assert(vector_pop(clone) == b, "original vector unchanged by clone");
+    assert(clone->length == 1, "length of clone changed");
+    assert(vector->length == 2, "length of original did not change");
+
+    vector_destroy(vector);
+    vector_destroy(clone);
+}
+
 int main() {
     test_create();
     test_push();
     test_pop();
     test_clear();
+    test_clone();
 
     return 0;
 }

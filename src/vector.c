@@ -40,6 +40,32 @@ void vector_destroy(struct vector *this) {
     free(this);
 }
 
+/* Copy the vector's contents into a new vector instance. The clone instance
+ * must be freed with `vector_destroy`.
+ *
+ * this - The vector to copy.
+ *
+ * Returns a new vector or null if memory allocation failed.
+ */
+struct vector *vector_clone(struct vector *this) {
+    struct vector *clone = vector_create();
+    if (!clone) {
+        return NULL;
+    }
+
+    if (clone->capacity < this->length) {
+        if (!vector_resize(clone, this->length)) {
+            vector_destroy(clone);
+            return NULL;
+        }
+    }
+
+    memcpy(clone->items, this->items, this->length * sizeof(void *));
+    clone->length = this->length;
+
+    return clone;
+}
+
 /* Remove all items from a vector. The items themselves are not freed. The
  * caller must free the data items. The vector does not resize after removing
  * the items. The memory is still allocated for future inserts.
