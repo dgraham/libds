@@ -34,7 +34,7 @@ struct vector *vector_create() {
  * Returns nothing.
  */
 void vector_destroy(struct vector *this) {
-    this->length = 0;
+    vector_clear(this);
     this->capacity = 0;
     free(this->items);
     free(this);
