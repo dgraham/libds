@@ -8,6 +8,7 @@ void test_push(void);
 void test_pop(void);
 void test_clear(void);
 void test_clone(void);
+void test_concat(void);
 
 void assert(bool success, const char *message) {
     if (!success) {
@@ -100,12 +101,45 @@ void test_clone() {
     vector_destroy(clone);
 }
 
+void test_concat() {
+    struct vector *list1 = vector_create();
+    struct vector *list2 = vector_create();
+
+    char *item1 = "test1";
+    char *item2 = "test2";
+    vector_push(list1, item1);
+    vector_push(list1, item2);
+
+    char *item3 = "test3";
+    char *item4 = "test4";
+    vector_push(list2, item3);
+    vector_push(list2, item4);
+
+    assert(vector_concat(list1, list2), "concatenation succeeded");
+    assert(list1->length == 4, "incremented length");
+    assert(list2->length == 2, "source list length unchanged");
+
+    assert(vector_pop(list1) == item4, "popped item four");
+    assert(vector_pop(list1) == item3, "popped item three");
+    assert(vector_pop(list1) == item2, "popped item two");
+    assert(vector_pop(list1) == item1, "popped item one");
+    assert(vector_pop(list1) == NULL, "vector is empty");
+
+    assert(vector_pop(list2) == item4, "popped last item");
+    assert(vector_pop(list2) == item3, "popped first item");
+    assert(vector_pop(list2) == NULL, "vector is empty");
+
+    vector_destroy(list1);
+    vector_destroy(list2);
+}
+
 int main() {
     test_create();
     test_push();
     test_pop();
     test_clear();
     test_clone();
+    test_concat();
 
     return 0;
 }

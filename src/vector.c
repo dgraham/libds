@@ -118,6 +118,28 @@ void *vector_pop(struct vector *this) {
     return item;
 }
 
+/* Concatenate a vector's items onto the end of another vector. The source
+ * vector is unchanged.
+ *
+ * this  - The destination vector.
+ * other - The source vector.
+ *
+ * Returns false if memory allocation fails.
+ */
+bool vector_concat(struct vector *this, struct vector *other) {
+    size_t total = this->length + other->length;
+    if (this->capacity < total) {
+        if (!vector_resize(this, total)) {
+            return false;
+        }
+    }
+
+    memcpy(this->items + this->length, other->items, other->length * sizeof(void *));
+    this->length = total;
+
+    return true;
+}
+
 /* Private: Allocate memory to store list item pointers.
  *
  * this     - The list to resize.
