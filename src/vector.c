@@ -61,6 +61,24 @@ bool vector_push(struct vector *this, void *item) {
     return true;
 }
 
+/* Remove the last item from the list. When used with `push`, the vector can
+ * be used as a stack.
+ *
+ * this - The vector to pop.
+ *
+ * Returns the last item or null if the list is empty.
+ */
+void *vector_pop(struct vector *this) {
+    if (this->length == 0) {
+        return NULL;
+    }
+
+    void *item = this->items[this->length - 1];
+    this->items[this->length - 1] = NULL;
+    this->length--;
+    return item;
+}
+
 /* Private: Allocate memory to store list item pointers.
  *
  * this     - The list to resize.

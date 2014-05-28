@@ -5,6 +5,7 @@
 void assert(bool success, const char *message);
 void test_create(void);
 void test_push(void);
+void test_pop(void);
 
 void assert(bool success, const char *message) {
     if (!success) {
@@ -39,9 +40,29 @@ void test_push() {
     vector_destroy(vector);
 }
 
+void test_pop() {
+    struct vector *vector = vector_create();
+
+    char *a = "item1";
+    char *b = "item2";
+    vector_push(vector, a);
+    vector_push(vector, b);
+
+    assert(vector_pop(vector) == b, "removed last item");
+    assert(vector->length == 1, "length is decremented");
+    assert(vector->items[1] == NULL, "cleared item pointer");
+
+    assert(vector_pop(vector) == a, "removed first item");
+    assert(vector->length == 0, "vector is empty");
+    assert(vector->items[0] == NULL, "cleared item pointer");
+
+    vector_destroy(vector);
+}
+
 int main() {
     test_create();
     test_push();
+    test_pop();
 
     return 0;
 }
