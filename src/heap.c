@@ -224,11 +224,14 @@ void heap_destroy_iterator(struct iterator *this) {
 void *heap_next_node(struct iterator *this) {
     struct heap *heap = this->iterable;
 
-    if (this->current) {
+    bool first = !this->current && this->index == 0;
+
+    this->current = heap_pop(heap);
+
+    if (!first && this->current) {
         this->index++;
     }
 
-    this->current = heap_pop(heap);
     return this->current;
 }
 
