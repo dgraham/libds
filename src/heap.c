@@ -128,8 +128,11 @@ void *heap_pop(struct heap *this) {
 
     void *root = this->nodes[0];
     this->nodes[0] = this->nodes[this->size - 1];
+    this->nodes[this->size - 1] = NULL;
     this->size--;
-    heap_move_down(this, 0);
+    if (this->size > 0) {
+        heap_move_down(this, 0);
+    }
 
     return root;
 }
