@@ -9,6 +9,7 @@ void test_pop(void);
 void test_clear(void);
 void test_clone(void);
 void test_concat(void);
+void test_unshift(void);
 
 void assert(bool success, const char *message) {
     if (!success) {
@@ -133,6 +134,23 @@ void test_concat() {
     vector_destroy(list2);
 }
 
+void test_unshift() {
+    struct vector *vector = vector_create();
+
+    char *a = "item1";
+    assert(vector_unshift(vector, a), "unshifted first item");
+    assert(vector->length == 1, "incremented length");
+
+    char *b = "item2";
+    assert(vector_unshift(vector, b), "unshifted second item");
+    assert(vector->length == 2, "incremented length");
+
+    assert(vector_pop(vector) == a, "popped first item");
+    assert(vector_pop(vector) == b, "popped second item");
+
+    vector_destroy(vector);
+}
+
 int main() {
     test_create();
     test_push();
@@ -140,6 +158,7 @@ int main() {
     test_clear();
     test_clone();
     test_concat();
+    test_unshift();
 
     return 0;
 }

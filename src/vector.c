@@ -118,6 +118,29 @@ void *vector_pop(struct vector *this) {
     return item;
 }
 
+/* Add an item to the front of the list. This is relatively expensive because
+ * all other item pointers must shift down one position to accomodate the new
+ * first item.
+ *
+ * this - The vector to store the item.
+ * item - The data to add to the list.
+ *
+ * Returns false if memory allocation failed.
+ */
+bool vector_unshift(struct vector *this, void *item) {
+    if (this->length == this->capacity) {
+        if (!vector_resize(this, this->capacity * 2)) {
+            return false;
+        }
+    }
+
+    memmove(this->items + 1, this->items, this->length * sizeof(void *));
+    this->items[0] = item;
+    this->length++;
+
+    return true;
+}
+
 /* Concatenate a vector's items onto the end of another vector. The source
  * vector is unchanged.
  *
