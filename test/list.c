@@ -236,17 +236,17 @@ void test_iterator() {
     void *first = nodes->next(nodes);
     assert(first == item1, "returns first item");
     assert(nodes->current == item1, "stores current item");
-    assert(nodes->index == 1, "increments index");
+    assert(nodes->index == 0, "first iteration is index zero");
 
     void *second = nodes->next(nodes);
     assert(second == item2, "returns second item");
     assert(nodes->current == item2, "stores current item");
-    assert(nodes->index == 2, "increments index");
+    assert(nodes->index == 1, "increments index");
 
     void *third = nodes->next(nodes);
     assert(third == NULL, "returns null when iteration is complete");
     assert(nodes->current == NULL, "current item is null");
-    assert(nodes->index == 2, "does not increment index");
+    assert(nodes->index == 1, "does not increment index");
 
     nodes->destroy(nodes);
     list_destroy(list);

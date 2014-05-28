@@ -222,10 +222,14 @@ void *list_shift(struct list *this) {
 void *list_next_node(struct iterator *this) {
     struct lnode *node = this->iterable;
 
+    bool first = !this->current && this->index == 0;
+
     if (node) {
         this->iterable = node->next;
         this->current = node->value;
-        this->index++;
+        if (!first) {
+            this->index++;
+        }
     } else {
         this->current = NULL;
     }
