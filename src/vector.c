@@ -40,6 +40,27 @@ void vector_destroy(struct vector *this) {
     free(this);
 }
 
+/* Add an item to the end of the vector. Expands the vector's capacity to
+ * store the additional data.
+ *
+ * this - The vector to store the new item.
+ * item - The data to append to the list.
+ *
+ * Returns false if memory allocation failed.
+ */
+bool vector_push(struct vector *this, void *item) {
+    if (this->length == this->capacity) {
+        if (!vector_resize(this, this->capacity * 2)) {
+            return false;
+        }
+    }
+
+    this->items[this->length] = item;
+    this->length++;
+
+    return true;
+}
+
 /* Private: Allocate memory to store list item pointers.
  *
  * this     - The list to resize.

@@ -15,4 +15,6 @@ struct vector *vector_create(void);
 
 void vector_destroy(struct vector *this);
 
+bool vector_push(struct vector *this, void *item);
+
 #endif
