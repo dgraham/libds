@@ -118,6 +118,26 @@ void *vector_pop(struct vector *this) {
     return item;
 }
 
+/* Remove the first item from the list. This is a relatively expensive
+ * operation because all following item pointers must be shifted one position
+ * to the front of the list. A linked list is more efficient for use as a
+ * queue.
+ *
+ * this - The vector to shift off an item.
+ *
+ * Returns the first item or null if the vector is empty.
+ */
+void *vector_shift(struct vector *this) {
+    if (this->length == 0) {
+        return NULL;
+    }
+
+    this->length--;
+    void *item = this->items[0];
+    memmove(this->items, this->items + 1, this->length * sizeof(void *));
+    return item;
+}
+
 /* Add an item to the front of the list. This is relatively expensive because
  * all other item pointers must shift down one position to accomodate the new
  * first item.

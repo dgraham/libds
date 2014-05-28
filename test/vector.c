@@ -10,6 +10,7 @@ void test_clear(void);
 void test_clone(void);
 void test_concat(void);
 void test_unshift(void);
+void test_shift(void);
 
 void assert(bool success, const char *message) {
     if (!success) {
@@ -151,6 +152,27 @@ void test_unshift() {
     vector_destroy(vector);
 }
 
+void test_shift() {
+    struct vector *vector = vector_create();
+
+    char *a = "item1";
+    char *b = "item2";
+
+    vector_unshift(vector, a);
+    vector_unshift(vector, b);
+
+    assert(vector_shift(vector) == b, "shifted second item");
+    assert(vector->length == 1, "decremented length");
+
+    assert(vector_shift(vector) == a, "shifted first item");
+    assert(vector->length == 0, "decremented length");
+
+    assert(vector_shift(vector) == NULL, "shifted null item");
+    assert(vector->length == 0, "does not decrement length");
+
+    vector_destroy(vector);
+}
+
 int main() {
     test_create();
     test_push();
@@ -159,6 +181,7 @@ int main() {
     test_clone();
     test_concat();
     test_unshift();
+    test_shift();
 
     return 0;
 }
