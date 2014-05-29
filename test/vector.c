@@ -17,6 +17,7 @@ void test_sort(void);
 void test_iterator(void);
 void test_get(void);
 void test_set(void);
+void test_slice(void);
 
 void assert(bool success, const char *message) {
     if (!success) {
@@ -268,6 +269,54 @@ void test_set() {
     vector_destroy(vector);
 }
 
+void test_slice() {
+    struct vector *vector = vector_create();
+    struct vector *slice = NULL;
+
+    char *a = "item1";
+    char *b = "item2";
+
+    slice = vector_slice(vector, 0, 1);
+    assert(slice != NULL, "empty vector returns empty slice");
+    assert(slice->length == 0, "slice length is zero");
+    vector_destroy(slice);
+
+    vector_push(vector, a);
+
+    slice = vector_slice(vector, 0, 0);
+    assert(slice != NULL, "length zero returns empty slice");
+    assert(slice->length == 0, "slice length is zero");
+    vector_destroy(slice);
+
+    slice = vector_slice(vector, 1, 1);
+    assert(slice != NULL, "start past end of vector returns empty slice");
+    assert(slice->length == 0, "slice length is zero");
+    vector_destroy(slice);
+
+    slice = vector_slice(vector, 0, 2);
+    assert(slice != NULL, "length past end of vector returns all of vector");
+    assert(slice->length == 1, "slice length is one");
+    assert(vector_get(slice, 0) == a, "slice contains first item");
+    vector_destroy(slice);
+
+    vector_push(vector, b);
+
+    slice = vector_slice(vector, 1, 1);
+    assert(slice != NULL, "start at index 1 returns partial vector");
+    assert(slice->length == 1, "slice length is one");
+    assert(vector_get(slice, 0) == b, "slice contains second item");
+    vector_destroy(slice);
+
+    slice = vector_slice(vector, 0, 2);
+    assert(slice != NULL, "slice first to last returns full vector");
+    assert(slice->length == 2, "slice length is two");
+    assert(vector_get(slice, 0) == a, "slice contains first item");
+    assert(vector_get(slice, 1) == b, "slice contains second item");
+    vector_destroy(slice);
+
+    vector_destroy(vector);
+}
+
 int main() {
     test_create();
     test_push();
@@ -281,6 +330,7 @@ int main() {
     test_iterator();
     test_get();
     test_set();
+    test_slice();
 
     return 0;
 }

@@ -117,6 +117,45 @@ void *vector_set(struct vector *this, size_t index, void *item) {
     return evicted;
 }
 
+/* Create a new vector from a range of an existing vector. The returned vector
+ * must be deallocated with `vector_destroy`. The source vector is unchanged.
+ *
+ * this   - The vector from which to slice elements.
+ * start  - The index to begin the range.
+ * length - The number of elements to return.
+ *
+ * Returns the vector subset or null if memory allocation failed.
+ */
+struct vector *vector_slice(struct vector *this, size_t start, size_t length) {
+    struct vector *slice = vector_create();
+    if (!slice) {
+        return NULL;
+    }
+
+    if (this->length == 0 || length == 0 || start > this->length - 1) {
+        return slice;
+    }
+
+    size_t end = start + length - 1;
+    if (end > this->length - 1) {
+        end = this->length - 1;
+    }
+
+    size_t total = end - start + 1;
+
+    if (slice->capacity < total) {
+        if (!vector_resize(slice, total)) {
+            vector_destroy(slice);
+            return NULL;
+        }
+    }
+
+    memcpy(slice->items, this->items + start, total * sizeof(void *));
+
+    slice->length = total;
+    return slice;
+}
+
 /* Add an item to the end of the vector. Expands the vector's capacity to
  * store the additional data.
  *
