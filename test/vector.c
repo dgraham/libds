@@ -14,6 +14,7 @@ void test_concat(void);
 void test_unshift(void);
 void test_shift(void);
 void test_sort(void);
+void test_iterator(void);
 
 void assert(bool success, const char *message) {
     if (!success) {
@@ -202,6 +203,38 @@ void test_sort() {
     vector_destroy(vector);
 }
 
+void test_iterator() {
+    struct vector *vector = vector_create();
+
+    char *item1 = "test1";
+    char *item2 = "test2";
+    vector_push(vector, item1);
+    vector_push(vector, item2);
+
+    struct iterator *items = vector_iterator(vector);
+    assert(items->destroy != NULL, "has a destructor function");
+    assert(items->current == NULL, "starts with null item");
+    assert(items->index == 0, "starts at index 0");
+
+    void *first = items->next(items);
+    assert(first == item1, "returns first item");
+    assert(items->current == item1, "stores current item");
+    assert(items->index == 1, "increments index");
+
+    void *second = items->next(items);
+    assert(second == item2, "returns second item");
+    assert(items->current == item2, "stores current item");
+    assert(items->index == 2, "increments index");
+
+    void *third = items->next(items);
+    assert(third == NULL, "returns null when iteration is complete");
+    assert(items->current == NULL, "current item is null");
+    assert(items->index == 2, "does not increment index");
+
+    items->destroy(items);
+    vector_destroy(vector);
+}
+
 int main() {
     test_create();
     test_push();
@@ -212,6 +245,7 @@ int main() {
     test_unshift();
     test_shift();
     test_sort();
+    test_iterator();
 
     return 0;
 }

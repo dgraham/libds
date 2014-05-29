@@ -2,6 +2,7 @@
 #include "vector.h"
 
 bool vector_resize(struct vector *this, size_t capacity);
+void *vector_next_item(struct iterator *this);
 
 /* Allocate memory for a new vector. The memory must be freed with a
  * subsequent call to `vector_destroy`.
@@ -208,6 +209,45 @@ bool vector_concat(struct vector *this, struct vector *other) {
  */
 void vector_sort(struct vector *this, int (*comparator)(const void *, const void *)) {
     qsort(this->items, this->length, sizeof(void *), comparator);
+}
+
+/* Create an external iterator with which to loop over each item in the list.
+ * The caller must free the iterator's memory when iteration is complete.
+ *
+ * this - The vector to iterate through.
+ *
+ * Examples
+ *
+ *   struct iterator *items = vector_iterator(vector);
+ *   while (items->next(items)) {
+ *       char *name = items->current;
+ *       printf("index: %lu, name: %s\n", items->index, name);
+ *   }
+ *   items->destroy(items);
+ *
+ * Returns an iterator or null if memory allocation failed.
+ */
+struct iterator *vector_iterator(struct vector *this) {
+    return iterator_create(this, vector_next_item);
+}
+
+/* Private: Advance the iterator to the next item in the list.
+ *
+ * this - The iterator to advance.
+ *
+ * Returns the next item or null if iteration is complete.
+ */
+void *vector_next_item(struct iterator *this) {
+    struct vector *list = this->iterable;
+
+    if (this->index == list->length) {
+        this->current = NULL;
+    } else {
+        this->current = list->items[this->index];
+        this->index++;
+    }
+
+    return this->current;
 }
 
 /* Private: Allocate memory to store list item pointers.
