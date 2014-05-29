@@ -25,6 +25,8 @@ void *vector_remove(struct vector *this, size_t index);
 
 struct vector *vector_slice(struct vector *this, size_t start, size_t end);
 
+bool vector_insert(struct vector *this, size_t index, void *item);
+
 struct iterator *vector_iterator(struct vector *this);
 
 bool vector_concat(struct vector *this, struct vector *other);

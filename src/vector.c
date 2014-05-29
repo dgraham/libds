@@ -143,6 +143,34 @@ void *vector_remove(struct vector *this, size_t index) {
     return evicted;
 }
 
+/* Insert an item into the middle of the vector.
+ *
+ * this  - The vector to store the item.
+ * index - The index at which to insert the item.
+ * item  - The data to add to the vector.
+ *
+ * Returns false if memory allocation failed.
+ */
+bool vector_insert(struct vector *this, size_t index, void *item) {
+    if (this->length == 0 || index > this->length - 1) {
+        return false;
+    }
+
+    if (this->length == this->capacity) {
+        if (!vector_resize(this, this->capacity * 2)) {
+            return false;
+        }
+    }
+
+    size_t length = (this->length - index) * sizeof(void *);
+    memmove(this->items + index + 1, this->items + index, length);
+
+    this->items[index] = item;
+    this->length++;
+
+    return true;
+}
+
 /* Create a new vector from a range of an existing vector. The returned vector
  * must be deallocated with `vector_destroy`. The source vector is unchanged.
  *

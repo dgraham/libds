@@ -19,6 +19,7 @@ void test_get(void);
 void test_set(void);
 void test_slice(void);
 void test_remove(void);
+void test_insert(void);
 
 void assert(bool success, const char *message) {
     if (!success) {
@@ -354,6 +355,33 @@ void test_remove() {
     vector_destroy(vector);
 }
 
+void test_insert() {
+    struct vector *vector = vector_create();
+
+    char *a = "item1";
+    char *b = "item2";
+    char *c = "item3";
+
+    assert(!vector_insert(vector, 0, a), "empty vector rejects insert");
+
+    vector_push(vector, a);
+
+    assert(!vector_insert(vector, 1, a), "out of bounds rejects insert");
+
+    assert(vector_insert(vector, 0, b), "in bounds accepts insert");
+    assert(vector->length == 2, "length is incremented");
+    assert(vector->items[0] == b, "inserted index is item");
+    assert(vector->items[1] == a, "previous item index shifted");
+
+    assert(vector_insert(vector, 1, c), "in middle accepts insert");
+    assert(vector->length == 3, "length is incremented");
+    assert(vector->items[0] == b, "first item unchanged");
+    assert(vector->items[1] == c, "inserted index is item");
+    assert(vector->items[2] == a, "previous item index shifted");
+
+    vector_destroy(vector);
+}
+
 int main() {
     test_create();
     test_push();
@@ -369,6 +397,7 @@ int main() {
     test_set();
     test_slice();
     test_remove();
+    test_insert();
 
     return 0;
 }
