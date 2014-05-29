@@ -183,6 +183,33 @@ bool vector_concat(struct vector *this, struct vector *other) {
     return true;
 }
 
+/* Sort a vector in-place.
+ *
+ * The array being sorted is an array of pointers to the items in the vector.
+ * The comparator function receives two pointers to item memory that must be
+ * cast and dereferenced to compare the actual data stored in those slots. See
+ * the example below for a comparison of a vector of string items.
+ *
+ * this       - The vector to sort.
+ * comparator - The function used to compare two items. Returns -1, 0, or 1 if
+ *              the item is less than, equal to, or greater than the other item.
+ *
+ * Examples
+ *
+ *   int compare(const void *a, const void *b) {
+ *       const char **a2 = (const char **) a;
+ *       const char **b2 = (const char **) b;
+ *       return strcmp(*a2, *b2);
+ *   }
+ *
+ *   vector_sort(vector, compare);
+ *
+ * Returns nothing.
+ */
+void vector_sort(struct vector *this, int (*comparator)(const void *, const void *)) {
+    qsort(this->items, this->length, sizeof(void *), comparator);
+}
+
 /* Private: Allocate memory to store list item pointers.
  *
  * this     - The list to resize.

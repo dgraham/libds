@@ -1,8 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "vector.h"
 
 void assert(bool success, const char *message);
+int compare_items(const void *a, const void *b);
 void test_create(void);
 void test_push(void);
 void test_pop(void);
@@ -11,12 +13,19 @@ void test_clone(void);
 void test_concat(void);
 void test_unshift(void);
 void test_shift(void);
+void test_sort(void);
 
 void assert(bool success, const char *message) {
     if (!success) {
         fprintf(stderr, "\t[vector] failed: %s\n", message);
         exit(1);
     }
+}
+
+int compare_items(const void *a, const void *b) {
+    const char **a2 = (const char **) a;
+    const char **b2 = (const char **) b;
+    return strcmp(*a2, *b2);
 }
 
 void test_create() {
@@ -173,6 +182,26 @@ void test_shift() {
     vector_destroy(vector);
 }
 
+void test_sort() {
+    struct vector *vector = vector_create();
+
+    char *a = "item1";
+    char *b = "item2";
+    char *c = "item3";
+
+    vector_push(vector, b);
+    vector_push(vector, c);
+    vector_push(vector, a);
+
+    vector_sort(vector, compare_items);
+
+    assert(vector_shift(vector) == a, "first item in place");
+    assert(vector_shift(vector) == b, "second item in place");
+    assert(vector_shift(vector) == c, "third item in place");
+
+    vector_destroy(vector);
+}
+
 int main() {
     test_create();
     test_push();
@@ -182,6 +211,7 @@ int main() {
     test_concat();
     test_unshift();
     test_shift();
+    test_sort();
 
     return 0;
 }
