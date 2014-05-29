@@ -19,6 +19,8 @@ struct vector *vector_clone(struct vector *this);
 
 void *vector_get(struct vector *this, size_t index);
 
+void *vector_set(struct vector *this, size_t index, void *item);
+
 struct iterator *vector_iterator(struct vector *this);
 
 bool vector_concat(struct vector *this, struct vector *other);

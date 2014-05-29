@@ -95,6 +95,28 @@ void *vector_get(struct vector *this, size_t index) {
     return this->items[index];
 }
 
+/* Store an item at an index. Any previous item is not freed when it's
+ * replaced. The previous item is returned for the caller to free as needed.
+ *
+ * If the index is past the end of the vector, it is not inserted and null
+ * is returned. Use `push` or `unshift` to expand the vector with new items.
+ *
+ * this  - The vector to hold the item.
+ * index - The index at which to store the new item.
+ * item  - The data to store in the vector.
+ *
+ * Returns the previous item stored at the index or null.
+ */
+void *vector_set(struct vector *this, size_t index, void *item) {
+    if (this->length == 0 || index > this->length - 1) {
+        return NULL;
+    }
+
+    void *evicted = this->items[index];
+    this->items[index] = item;
+    return evicted;
+}
+
 /* Add an item to the end of the vector. Expands the vector's capacity to
  * store the additional data.
  *

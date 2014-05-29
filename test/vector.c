@@ -16,6 +16,7 @@ void test_shift(void);
 void test_sort(void);
 void test_iterator(void);
 void test_get(void);
+void test_set(void);
 
 void assert(bool success, const char *message) {
     if (!success) {
@@ -250,6 +251,23 @@ void test_get() {
     vector_destroy(vector);
 }
 
+void test_set() {
+    struct vector *vector = vector_create();
+
+    char *a = "item1";
+    char *b = "item2";
+
+    assert(vector_set(vector, 0, a) == NULL, "empty vector returns null");
+
+    vector_push(vector, a);
+
+    assert(vector_set(vector, 1, b) == NULL, "out of bounds returns null");
+    assert(vector_set(vector, 0, b) == a, "set returns previous item");
+    assert(vector_get(vector, 0) == b, "stored new item");
+
+    vector_destroy(vector);
+}
+
 int main() {
     test_create();
     test_push();
@@ -262,6 +280,7 @@ int main() {
     test_sort();
     test_iterator();
     test_get();
+    test_set();
 
     return 0;
 }
