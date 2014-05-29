@@ -80,6 +80,21 @@ void vector_clear(struct vector *this) {
     this->length = 0;
 }
 
+/* Retrieve the item stored at an index. The index is bounds-checked. If
+ * the index points past the end of the vector, null is returned.
+ *
+ * this  - The vector from which to retrieve the item.
+ * index - The zero-based item index.
+ *
+ * Returns the item or null if the index is out of bounds.
+ */
+void *vector_get(struct vector *this, size_t index) {
+    if (this->length == 0 || index > this->length - 1) {
+        return NULL;
+    }
+    return this->items[index];
+}
+
 /* Add an item to the end of the vector. Expands the vector's capacity to
  * store the additional data.
  *

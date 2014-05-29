@@ -15,6 +15,7 @@ void test_unshift(void);
 void test_shift(void);
 void test_sort(void);
 void test_iterator(void);
+void test_get(void);
 
 void assert(bool success, const char *message) {
     if (!success) {
@@ -235,6 +236,20 @@ void test_iterator() {
     vector_destroy(vector);
 }
 
+void test_get() {
+    struct vector *vector = vector_create();
+
+    assert(vector_get(vector, 0) == NULL, "empty vector returns null");
+
+    char *a = "item1";
+    vector_push(vector, a);
+
+    assert(vector_get(vector, 0) == a, "get returns item pointer");
+    assert(vector_get(vector, 1) == NULL, "out of bounds returns null");
+
+    vector_destroy(vector);
+}
+
 int main() {
     test_create();
     test_push();
@@ -246,6 +261,7 @@ int main() {
     test_shift();
     test_sort();
     test_iterator();
+    test_get();
 
     return 0;
 }
