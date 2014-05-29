@@ -21,6 +21,8 @@ void *vector_get(struct vector *this, size_t index);
 
 void *vector_set(struct vector *this, size_t index, void *item);
 
+void *vector_remove(struct vector *this, size_t index);
+
 struct vector *vector_slice(struct vector *this, size_t start, size_t end);
 
 struct iterator *vector_iterator(struct vector *this);

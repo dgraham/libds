@@ -117,6 +117,32 @@ void *vector_set(struct vector *this, size_t index, void *item) {
     return evicted;
 }
 
+/* Remove the item at the index and shrink the vector by one. The caller must
+ * free the item.
+ *
+ * this  - The vector to shrink.
+ * index - The item index to remove from the vector.
+ *
+ * Returns the item previously stored at the index or null.
+ */
+void *vector_remove(struct vector *this, size_t index) {
+    if (this->length == 0 || index > this->length - 1) {
+        return NULL;
+    }
+
+    void *evicted = this->items[index];
+
+    if (index < this->length - 1) {
+        size_t length = (this->length - index - 1) * sizeof(void *);
+        memmove(this->items + index, this->items + index + 1, length);
+    }
+
+    this->items[this->length - 1] = NULL;
+    this->length--;
+
+    return evicted;
+}
+
 /* Create a new vector from a range of an existing vector. The returned vector
  * must be deallocated with `vector_destroy`. The source vector is unchanged.
  *

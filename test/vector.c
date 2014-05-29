@@ -18,6 +18,7 @@ void test_iterator(void);
 void test_get(void);
 void test_set(void);
 void test_slice(void);
+void test_remove(void);
 
 void assert(bool success, const char *message) {
     if (!success) {
@@ -317,6 +318,42 @@ void test_slice() {
     vector_destroy(vector);
 }
 
+void test_remove() {
+    struct vector *vector = vector_create();
+
+    char *a = "item1";
+    char *b = "item2";
+
+    assert(vector_remove(vector, 0) == NULL, "empty vector returns null");
+
+    vector_push(vector, a);
+
+    assert(vector_remove(vector, 1) == NULL, "out of bounds returns null");
+
+    assert(vector_remove(vector, 0) == a, "in bounds returns item");
+    assert(vector->length == 0, "vector is empty");
+    assert(vector->items[0] == NULL, "removed index is null");
+
+    vector_push(vector, a);
+    vector_push(vector, b);
+
+    assert(vector_remove(vector, 0) == a, "in bounds returns item");
+    assert(vector->length == 1, "vector has one item");
+    assert(vector->items[0] == b, "first index is now second item");
+    assert(vector->items[1] == NULL, "removed index is null");
+
+    vector_clear(vector);
+    vector_push(vector, a);
+    vector_push(vector, b);
+
+    assert(vector_remove(vector, 1) == b, "last index returns item");
+    assert(vector->length == 1, "vector has one item");
+    assert(vector->items[0] == a, "first index is still first item");
+    assert(vector->items[1] == NULL, "removed index is null");
+
+    vector_destroy(vector);
+}
+
 int main() {
     test_create();
     test_push();
@@ -331,6 +368,7 @@ int main() {
     test_get();
     test_set();
     test_slice();
+    test_remove();
 
     return 0;
 }
