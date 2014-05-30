@@ -85,6 +85,37 @@ void hashmap_clear(struct hashmap *this) {
     this->size = 0;
 }
 
+/* Retrieve the value stored at the key.
+ *
+ * this - The hashmap from which to retrieve the value.
+ * key  - The key to look up in the map.
+ *
+ * Examples
+ *
+ *    int id = 42;
+ *    struct hkey key = {&id, sizeof(id)};
+ *    char *found = hashmap_get(map, &key);
+ *    if (found) {
+ *        printf("found id %d value: %s\n", id, found);
+ *    }
+ *
+ * Returns the value or null if not found.
+ */
+void *hashmap_get(struct hashmap *this, struct hkey *key) {
+    uint32_t hashed = hkey_hash(key->data, key->length);
+    size_t bucket = hashed % this->capacity;
+    struct hentry *entry = this->entries[bucket];
+
+    while (entry) {
+        if (hkey_equals(entry->key, key)) {
+            return entry->value;
+        }
+        entry = entry->chain;
+    }
+
+    return NULL;
+}
+
 /* Private: Allocate additional memory to accomodate a hash table with more
  * buckets and a reduced load factor.
  *
