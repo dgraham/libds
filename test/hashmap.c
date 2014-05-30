@@ -39,6 +39,11 @@ void test_set() {
 
     assert(hashmap_set(map, &key, a) == NULL);
     assert(map->size == 1);
+    assert(map->head != NULL);
+    assert(map->tail != NULL);
+    assert(map->head == map->tail);
+    assert(map->tail->next == NULL);
+
     assert(hashmap_set(map, &key, b) == a);
     assert(map->size == 1);
 
@@ -51,6 +56,9 @@ void test_set() {
     struct hkey key3 = {&id3, sizeof(id3)};
     assert(hashmap_set(map, &key3, a) == NULL);
     assert(map->size == 2);
+    assert(map->head != map->tail);
+    assert(map->tail->next == NULL);
+    assert(map->head->next == map->tail);
 
     hashmap_destroy(map);
 }
