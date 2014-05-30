@@ -1,6 +1,8 @@
 #include <string.h>
 #include "hashmap.h"
 
+#define MAX_LOAD_FACTOR .75
+
 bool hashmap_resize(struct hashmap *this, size_t capacity);
 
 struct hentry *hentry_create(struct hkey *key, void *value);
@@ -83,6 +85,68 @@ void hashmap_clear(struct hashmap *this) {
     this->head = NULL;
     this->tail = NULL;
     this->size = 0;
+}
+
+/* Store a key and value pair in the hash table. If a previous value was stored
+ * at the key, it's returned so that it may be freed by the caller.
+ *
+ * this  - The hashmap in which to store the value.
+ * key   - The unique key to which to map the value. The caller must free this
+ *         key if it was heap allocated. The map maintains its own internal key
+ *         memory for the entry.
+ * value - The value to be looked up by its key.
+ *
+ * Examples
+ *
+ *    int id = 42;
+ *    char *value = "foo";
+ *    struct hkey key = {&id, sizeof(id)};
+ *    hashmap_set(map, &key, value);
+ *
+ * Returns the previous value or null.
+ */
+void *hashmap_set(struct hashmap *this, struct hkey *key, void *value) {
+    uint32_t hashed = hkey_hash(key->data, key->length);
+    size_t bucket = hashed % this->capacity;
+    struct hentry *entry = this->entries[bucket];
+
+    while (entry) {
+        if (hkey_equals(entry->key, key)) {
+            void *evicted = entry->value;
+            entry->value = value;
+            return evicted;
+        }
+        entry = entry->chain;
+    }
+
+    entry = hentry_create(key, value);
+    if (!entry) {
+        return NULL;
+    }
+
+    entry->chain = this->entries[bucket];
+    this->entries[bucket] = entry;
+
+    if (!this->head) {
+        this->head = entry;
+    }
+
+    if (this->tail) {
+        this->tail->next = entry;
+        entry->prev = this->tail;
+    }
+    this->tail = entry;
+
+    this->size++;
+
+    float load = (float) this->size / this->capacity;
+    if (load > MAX_LOAD_FACTOR) {
+        if (!hashmap_resize(this, this->capacity * 2)) {
+            return NULL;
+        }
+    }
+
+    return NULL;
 }
 
 /* Retrieve the value stored at the key.

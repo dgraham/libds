@@ -32,6 +32,8 @@ void hashmap_destroy(struct hashmap *this);
 
 void *hashmap_get(struct hashmap *this, struct hkey *key);
 
+void *hashmap_set(struct hashmap *this, struct hkey *key, void *value);
+
 void hashmap_clear(struct hashmap *this);
 
 #endif
