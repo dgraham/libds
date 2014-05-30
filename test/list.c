@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 #include "list.h"
 
-void assert(bool success, const char *message);
 void test_create(void);
 void test_push(void);
 void test_pop(void);
@@ -13,19 +13,12 @@ void test_concat(void);
 void test_clear(void);
 void test_iterator(void);
 
-void assert(bool success, const char *message) {
-    if (!success) {
-        fprintf(stderr, "\t[list] failed: %s\n", message);
-        exit(1);
-    }
-}
-
 void test_create() {
     struct list *list = list_create();
 
-    assert(list->head == NULL, "head pointer is null");
-    assert(list->tail == NULL, "tail pointer is null");
-    assert(list->length == 0, "list is empty");
+    assert(list->head == NULL);
+    assert(list->tail == NULL);
+    assert(list->length == 0);
 
     list_destroy(list);
 }
@@ -34,26 +27,26 @@ void test_push() {
     struct list *list = list_create();
 
     char *item1 = "test1";
-    assert(list_push(list, item1), "first item accepted");
-    assert(list->head != NULL, "head pointer is set");
-    assert(list->tail != NULL, "tail pointer is set");
-    assert(list->tail == list->head, "tail pointer equals head");
-    assert(list->length == 1, "length is incremented");
-    assert(list->head->value == item1, "stored item value");
-    assert(list->head->prev == NULL, "head item has no previous item");
-    assert(list->head->next == NULL, "head item has no next item");
+    assert(list_push(list, item1));
+    assert(list->head != NULL);
+    assert(list->tail != NULL);
+    assert(list->tail == list->head);
+    assert(list->length == 1);
+    assert(list->head->value == item1);
+    assert(list->head->prev == NULL);
+    assert(list->head->next == NULL);
 
     char *item2 = "test2";
-    assert(list_push(list, item2), "second item accepted");
-    assert(list->head != NULL, "head pointer is set");
-    assert(list->tail != NULL, "tail pointer is set");
-    assert(list->tail != list->head, "moved tail pointer");
-    assert(list->length == 2, "length is incremented");
-    assert(list->tail->value == item2, "stored item value");
-    assert(list->head->next == list->tail, "head item points to tail item");
-    assert(list->tail->next == NULL, "tail item points to null");
-    assert(list->tail->prev == list->head, "tail previous points to head");
-    assert(list->head->prev == NULL, "head has no previous node");
+    assert(list_push(list, item2));
+    assert(list->head != NULL);
+    assert(list->tail != NULL);
+    assert(list->tail != list->head);
+    assert(list->length == 2);
+    assert(list->tail->value == item2);
+    assert(list->head->next == list->tail);
+    assert(list->tail->next == NULL);
+    assert(list->tail->prev == list->head);
+    assert(list->head->prev == NULL);
 
     list_destroy(list);
 }
@@ -66,22 +59,22 @@ void test_pop() {
     list_push(list, item1);
     list_push(list, item2);
 
-    assert(list_pop(list) == item2, "removed last item");
-    assert(list->head != NULL, "head pointer is set");
-    assert(list->tail != NULL, "tail pointer is set");
-    assert(list->tail == list->head, "tail pointer equals head");
-    assert(list->length == 1, "length is decremented");
-    assert(list->head->value == item1, "stored item value");
-    assert(list->head->prev == NULL, "head item has no previous item");
-    assert(list->head->next == NULL, "head item has no next item");
+    assert(list_pop(list) == item2);
+    assert(list->head != NULL);
+    assert(list->tail != NULL);
+    assert(list->tail == list->head);
+    assert(list->length == 1);
+    assert(list->head->value == item1);
+    assert(list->head->prev == NULL);
+    assert(list->head->next == NULL);
 
-    assert(list_pop(list) == item1, "removed first item");
-    assert(list->head == NULL, "head pointer is null");
-    assert(list->tail == NULL, "tail pointer is null");
-    assert(list->length == 0, "list is empty");
+    assert(list_pop(list) == item1);
+    assert(list->head == NULL);
+    assert(list->tail == NULL);
+    assert(list->length == 0);
 
-    assert(list_pop(list) == NULL, "pop empty list returned null");
-    assert(list->length == 0, "empty list length remains zero");
+    assert(list_pop(list) == NULL);
+    assert(list->length == 0);
 
     list_destroy(list);
 }
@@ -90,27 +83,27 @@ void test_unshift() {
     struct list *list = list_create();
 
     char *item1 = "test1";
-    assert(list_unshift(list, item1), "first item accepted");
-    assert(list->head != NULL, "head pointer is set");
-    assert(list->tail != NULL, "tail pointer is set");
-    assert(list->tail == list->head, "tail pointer equals head");
-    assert(list->length == 1, "length is incremented");
-    assert(list->head->value == item1, "stored item value");
-    assert(list->head->prev == NULL, "head item has no previous item");
-    assert(list->head->next == NULL, "head item has no next item");
+    assert(list_unshift(list, item1));
+    assert(list->head != NULL);
+    assert(list->tail != NULL);
+    assert(list->tail == list->head);
+    assert(list->length == 1);
+    assert(list->head->value == item1);
+    assert(list->head->prev == NULL);
+    assert(list->head->next == NULL);
 
     char *item2 = "test2";
-    assert(list_unshift(list, item2), "second item accepted");
-    assert(list->head != NULL, "head pointer is set");
-    assert(list->tail != NULL, "tail pointer is set");
-    assert(list->tail != list->head, "moved tail pointer");
-    assert(list->length == 2, "length is incremented");
-    assert(list->tail->value == item1, "first item is now last");
-    assert(list->head->value == item2, "second item is now first");
-    assert(list->head->next == list->tail, "head item points to tail item");
-    assert(list->tail->next == NULL, "tail item points to null");
-    assert(list->tail->prev == list->head, "tail previous points to head");
-    assert(list->head->prev == NULL, "head has no previous node");
+    assert(list_unshift(list, item2));
+    assert(list->head != NULL);
+    assert(list->tail != NULL);
+    assert(list->tail != list->head);
+    assert(list->length == 2);
+    assert(list->tail->value == item1);
+    assert(list->head->value == item2);
+    assert(list->head->next == list->tail);
+    assert(list->tail->next == NULL);
+    assert(list->tail->prev == list->head);
+    assert(list->head->prev == NULL);
 
     list_destroy(list);
 }
@@ -123,22 +116,22 @@ void test_shift() {
     list_push(list, item1);
     list_push(list, item2);
 
-    assert(list_shift(list) == item1, "removed head item");
-    assert(list->head != NULL, "head pointer is set");
-    assert(list->tail != NULL, "tail pointer is set");
-    assert(list->tail == list->head, "tail pointer equals head");
-    assert(list->length == 1, "length is decremented");
-    assert(list->head->value == item2, "stored item value");
-    assert(list->head->prev == NULL, "head item has no previous item");
-    assert(list->head->next == NULL, "head item has no next item");
+    assert(list_shift(list) == item1);
+    assert(list->head != NULL);
+    assert(list->tail != NULL);
+    assert(list->tail == list->head);
+    assert(list->length == 1);
+    assert(list->head->value == item2);
+    assert(list->head->prev == NULL);
+    assert(list->head->next == NULL);
 
-    assert(list_shift(list) == item2, "removed tail item");
-    assert(list->head == NULL, "head pointer is null");
-    assert(list->tail == NULL, "tail pointer is null");
-    assert(list->length == 0, "list is empty");
+    assert(list_shift(list) == item2);
+    assert(list->head == NULL);
+    assert(list->tail == NULL);
+    assert(list->length == 0);
 
-    assert(list_shift(list) == NULL, "shift empty list returned null");
-    assert(list->length == 0, "empty list length remains zero");
+    assert(list_shift(list) == NULL);
+    assert(list->length == 0);
 
     list_destroy(list);
 }
@@ -152,23 +145,23 @@ void test_clone() {
     list_push(list, item2);
 
     struct list *clone = list_clone(list);
-    assert(clone != NULL, "clone allocated memory");
-    assert(clone != list, "clone is not same as original");
+    assert(clone != NULL);
+    assert(clone != list);
 
-    assert(clone->length == 2, "length matches source");
-    assert(clone->head != NULL, "head pointer is set");
-    assert(clone->tail != NULL, "tail pointer is set");
-    assert(clone->head->value == item1, "stored first item value");
-    assert(clone->tail->value == item2, "stored second item value");
-    assert(clone->head->prev == NULL, "head item has no previous item");
-    assert(clone->head->next == clone->tail, "head item points to tail");
+    assert(clone->length == 2);
+    assert(clone->head != NULL);
+    assert(clone->tail != NULL);
+    assert(clone->head->value == item1);
+    assert(clone->tail->value == item2);
+    assert(clone->head->prev == NULL);
+    assert(clone->head->next == clone->tail);
 
-    assert(clone->head != list->head, "head node is unique");
-    assert(clone->tail != list->tail, "tail node is unique");
+    assert(clone->head != list->head);
+    assert(clone->tail != list->tail);
 
-    assert(list_pop(clone) == item2, "original list unchanged by clone");
-    assert(clone->length == 1, "length of clone changed");
-    assert(list->length == 2, "length of original did not change");
+    assert(list_pop(clone) == item2);
+    assert(clone->length == 1);
+    assert(list->length == 2);
 
     list_destroy(list);
     list_destroy(clone);
@@ -188,12 +181,12 @@ void test_concat() {
     list_push(list2, item3);
     list_push(list2, item4);
 
-    assert(list_concat(list1, list2), "concatenation succeeded");
-    assert(list1->length == 4, "incremented length");
-    assert(list2->length == 2, "source list length unchanged");
+    assert(list_concat(list1, list2));
+    assert(list1->length == 4);
+    assert(list2->length == 2);
 
     list_push(list1, item4);
-    assert(list2->tail->next == NULL, "push only adds to one list");
+    assert(list2->tail->next == NULL);
 
     list_destroy(list1);
     list_destroy(list2);
@@ -208,14 +201,14 @@ void test_clear() {
     list_push(list, item2);
 
     list_clear(list);
-    assert(list->head == NULL, "head pointer is null");
-    assert(list->tail == NULL, "tail pointer is null");
-    assert(list->length == 0, "list is empty");
+    assert(list->head == NULL);
+    assert(list->tail == NULL);
+    assert(list->length == 0);
 
     list_clear(list);
-    assert(list->head == NULL, "head pointer is still null");
-    assert(list->tail == NULL, "tail pointer is still null");
-    assert(list->length == 0, "list is still empty");
+    assert(list->head == NULL);
+    assert(list->tail == NULL);
+    assert(list->length == 0);
 
     list_destroy(list);
 }
@@ -229,24 +222,24 @@ void test_iterator() {
     list_push(list, item2);
 
     struct iterator *nodes = list_iterator(list);
-    assert(nodes->destroy != NULL, "has a destructor function");
-    assert(nodes->current == NULL, "starts with null item");
-    assert(nodes->index == 0, "starts at index 0");
+    assert(nodes->destroy != NULL);
+    assert(nodes->current == NULL);
+    assert(nodes->index == 0);
 
     void *first = nodes->next(nodes);
-    assert(first == item1, "returns first item");
-    assert(nodes->current == item1, "stores current item");
-    assert(nodes->index == 0, "first iteration is index zero");
+    assert(first == item1);
+    assert(nodes->current == item1);
+    assert(nodes->index == 0);
 
     void *second = nodes->next(nodes);
-    assert(second == item2, "returns second item");
-    assert(nodes->current == item2, "stores current item");
-    assert(nodes->index == 1, "increments index");
+    assert(second == item2);
+    assert(nodes->current == item2);
+    assert(nodes->index == 1);
 
     void *third = nodes->next(nodes);
-    assert(third == NULL, "returns null when iteration is complete");
-    assert(nodes->current == NULL, "current item is null");
-    assert(nodes->index == 1, "does not increment index");
+    assert(third == NULL);
+    assert(nodes->current == NULL);
+    assert(nodes->index == 1);
 
     nodes->destroy(nodes);
     list_destroy(list);

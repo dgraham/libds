@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 #include "vector.h"
 
-void assert(bool success, const char *message);
 int compare_items(const void *a, const void *b);
 void test_create(void);
 void test_push(void);
@@ -21,13 +21,6 @@ void test_slice(void);
 void test_remove(void);
 void test_insert(void);
 
-void assert(bool success, const char *message) {
-    if (!success) {
-        fprintf(stderr, "\t[vector] failed: %s\n", message);
-        exit(1);
-    }
-}
-
 int compare_items(const void *a, const void *b) {
     const char **a2 = (const char **) a;
     const char **b2 = (const char **) b;
@@ -37,9 +30,9 @@ int compare_items(const void *a, const void *b) {
 void test_create() {
     struct vector *vector = vector_create();
 
-    assert(vector->length == 0, "vector is empty");
-    assert(vector->capacity > 0, "vector has item capacity");
-    assert(vector->items != NULL, "vector has items");
+    assert(vector->length == 0);
+    assert(vector->capacity > 0);
+    assert(vector->items != NULL);
 
     vector_destroy(vector);
 }
@@ -48,14 +41,14 @@ void test_push() {
     struct vector *vector = vector_create();
 
     char *a = "item1";
-    assert(vector_push(vector, a), "first item accepted");
-    assert(vector->length == 1, "length is incremented");
-    assert(vector->items[0] == a, "first pointer stored");
+    assert(vector_push(vector, a));
+    assert(vector->length == 1);
+    assert(vector->items[0] == a);
 
     char *b = "item2";
-    assert(vector_push(vector, b), "second item accepted");
-    assert(vector->length == 2, "length is incremented");
-    assert(vector->items[1] == b, "second pointer stored");
+    assert(vector_push(vector, b));
+    assert(vector->length == 2);
+    assert(vector->items[1] == b);
 
     vector_destroy(vector);
 }
@@ -68,13 +61,13 @@ void test_pop() {
     vector_push(vector, a);
     vector_push(vector, b);
 
-    assert(vector_pop(vector) == b, "removed last item");
-    assert(vector->length == 1, "length is decremented");
-    assert(vector->items[1] == NULL, "cleared item pointer");
+    assert(vector_pop(vector) == b);
+    assert(vector->length == 1);
+    assert(vector->items[1] == NULL);
 
-    assert(vector_pop(vector) == a, "removed first item");
-    assert(vector->length == 0, "vector is empty");
-    assert(vector->items[0] == NULL, "cleared item pointer");
+    assert(vector_pop(vector) == a);
+    assert(vector->length == 0);
+    assert(vector->items[0] == NULL);
 
     vector_destroy(vector);
 }
@@ -89,10 +82,10 @@ void test_clear() {
 
     vector_clear(vector);
 
-    assert(vector->length == 0, "vector is empty");
-    assert(vector->items[0] == NULL, "cleared first item pointer");
-    assert(vector->items[1] == NULL, "cleared last item pointer");
-    assert(vector->capacity > 0, "still has capacity");
+    assert(vector->length == 0);
+    assert(vector->items[0] == NULL);
+    assert(vector->items[1] == NULL);
+    assert(vector->capacity > 0);
 
     vector_destroy(vector);
 }
@@ -106,13 +99,13 @@ void test_clone() {
     vector_push(vector, b);
 
     struct vector *clone = vector_clone(vector);
-    assert(clone != NULL, "clone allocated memory");
-    assert(clone != vector, "clone is not same as original");
-    assert(clone->length == 2, "length matches source");
+    assert(clone != NULL);
+    assert(clone != vector);
+    assert(clone->length == 2);
 
-    assert(vector_pop(clone) == b, "original vector unchanged by clone");
-    assert(clone->length == 1, "length of clone changed");
-    assert(vector->length == 2, "length of original did not change");
+    assert(vector_pop(clone) == b);
+    assert(clone->length == 1);
+    assert(vector->length == 2);
 
     vector_destroy(vector);
     vector_destroy(clone);
@@ -132,19 +125,19 @@ void test_concat() {
     vector_push(list2, item3);
     vector_push(list2, item4);
 
-    assert(vector_concat(list1, list2), "concatenation succeeded");
-    assert(list1->length == 4, "incremented length");
-    assert(list2->length == 2, "source list length unchanged");
+    assert(vector_concat(list1, list2));
+    assert(list1->length == 4);
+    assert(list2->length == 2);
 
-    assert(vector_pop(list1) == item4, "popped item four");
-    assert(vector_pop(list1) == item3, "popped item three");
-    assert(vector_pop(list1) == item2, "popped item two");
-    assert(vector_pop(list1) == item1, "popped item one");
-    assert(vector_pop(list1) == NULL, "vector is empty");
+    assert(vector_pop(list1) == item4);
+    assert(vector_pop(list1) == item3);
+    assert(vector_pop(list1) == item2);
+    assert(vector_pop(list1) == item1);
+    assert(vector_pop(list1) == NULL);
 
-    assert(vector_pop(list2) == item4, "popped last item");
-    assert(vector_pop(list2) == item3, "popped first item");
-    assert(vector_pop(list2) == NULL, "vector is empty");
+    assert(vector_pop(list2) == item4);
+    assert(vector_pop(list2) == item3);
+    assert(vector_pop(list2) == NULL);
 
     vector_destroy(list1);
     vector_destroy(list2);
@@ -154,15 +147,15 @@ void test_unshift() {
     struct vector *vector = vector_create();
 
     char *a = "item1";
-    assert(vector_unshift(vector, a), "unshifted first item");
-    assert(vector->length == 1, "incremented length");
+    assert(vector_unshift(vector, a));
+    assert(vector->length == 1);
 
     char *b = "item2";
-    assert(vector_unshift(vector, b), "unshifted second item");
-    assert(vector->length == 2, "incremented length");
+    assert(vector_unshift(vector, b));
+    assert(vector->length == 2);
 
-    assert(vector_pop(vector) == a, "popped first item");
-    assert(vector_pop(vector) == b, "popped second item");
+    assert(vector_pop(vector) == a);
+    assert(vector_pop(vector) == b);
 
     vector_destroy(vector);
 }
@@ -176,14 +169,14 @@ void test_shift() {
     vector_unshift(vector, a);
     vector_unshift(vector, b);
 
-    assert(vector_shift(vector) == b, "shifted second item");
-    assert(vector->length == 1, "decremented length");
+    assert(vector_shift(vector) == b);
+    assert(vector->length == 1);
 
-    assert(vector_shift(vector) == a, "shifted first item");
-    assert(vector->length == 0, "decremented length");
+    assert(vector_shift(vector) == a);
+    assert(vector->length == 0);
 
-    assert(vector_shift(vector) == NULL, "shifted null item");
-    assert(vector->length == 0, "does not decrement length");
+    assert(vector_shift(vector) == NULL);
+    assert(vector->length == 0);
 
     vector_destroy(vector);
 }
@@ -201,9 +194,9 @@ void test_sort() {
 
     vector_sort(vector, compare_items);
 
-    assert(vector_shift(vector) == a, "first item in place");
-    assert(vector_shift(vector) == b, "second item in place");
-    assert(vector_shift(vector) == c, "third item in place");
+    assert(vector_shift(vector) == a);
+    assert(vector_shift(vector) == b);
+    assert(vector_shift(vector) == c);
 
     vector_destroy(vector);
 }
@@ -217,24 +210,24 @@ void test_iterator() {
     vector_push(vector, item2);
 
     struct iterator *items = vector_iterator(vector);
-    assert(items->destroy != NULL, "has a destructor function");
-    assert(items->current == NULL, "starts with null item");
-    assert(items->index == 0, "starts at index 0");
+    assert(items->destroy != NULL);
+    assert(items->current == NULL);
+    assert(items->index == 0);
 
     void *first = items->next(items);
-    assert(first == item1, "returns first item");
-    assert(items->current == item1, "stores current item");
-    assert(items->index == 1, "increments index");
+    assert(first == item1);
+    assert(items->current == item1);
+    assert(items->index == 1);
 
     void *second = items->next(items);
-    assert(second == item2, "returns second item");
-    assert(items->current == item2, "stores current item");
-    assert(items->index == 2, "increments index");
+    assert(second == item2);
+    assert(items->current == item2);
+    assert(items->index == 2);
 
     void *third = items->next(items);
-    assert(third == NULL, "returns null when iteration is complete");
-    assert(items->current == NULL, "current item is null");
-    assert(items->index == 2, "does not increment index");
+    assert(third == NULL);
+    assert(items->current == NULL);
+    assert(items->index == 2);
 
     items->destroy(items);
     vector_destroy(vector);
@@ -243,13 +236,13 @@ void test_iterator() {
 void test_get() {
     struct vector *vector = vector_create();
 
-    assert(vector_get(vector, 0) == NULL, "empty vector returns null");
+    assert(vector_get(vector, 0) == NULL);
 
     char *a = "item1";
     vector_push(vector, a);
 
-    assert(vector_get(vector, 0) == a, "get returns item pointer");
-    assert(vector_get(vector, 1) == NULL, "out of bounds returns null");
+    assert(vector_get(vector, 0) == a);
+    assert(vector_get(vector, 1) == NULL);
 
     vector_destroy(vector);
 }
@@ -260,13 +253,13 @@ void test_set() {
     char *a = "item1";
     char *b = "item2";
 
-    assert(vector_set(vector, 0, a) == NULL, "empty vector returns null");
+    assert(vector_set(vector, 0, a) == NULL);
 
     vector_push(vector, a);
 
-    assert(vector_set(vector, 1, b) == NULL, "out of bounds returns null");
-    assert(vector_set(vector, 0, b) == a, "set returns previous item");
-    assert(vector_get(vector, 0) == b, "stored new item");
+    assert(vector_set(vector, 1, b) == NULL);
+    assert(vector_set(vector, 0, b) == a);
+    assert(vector_get(vector, 0) == b);
 
     vector_destroy(vector);
 }
@@ -279,41 +272,41 @@ void test_slice() {
     char *b = "item2";
 
     slice = vector_slice(vector, 0, 1);
-    assert(slice != NULL, "empty vector returns empty slice");
-    assert(slice->length == 0, "slice length is zero");
+    assert(slice != NULL);
+    assert(slice->length == 0);
     vector_destroy(slice);
 
     vector_push(vector, a);
 
     slice = vector_slice(vector, 0, 0);
-    assert(slice != NULL, "length zero returns empty slice");
-    assert(slice->length == 0, "slice length is zero");
+    assert(slice != NULL);
+    assert(slice->length == 0);
     vector_destroy(slice);
 
     slice = vector_slice(vector, 1, 1);
-    assert(slice != NULL, "start past end of vector returns empty slice");
-    assert(slice->length == 0, "slice length is zero");
+    assert(slice != NULL);
+    assert(slice->length == 0);
     vector_destroy(slice);
 
     slice = vector_slice(vector, 0, 2);
-    assert(slice != NULL, "length past end of vector returns all of vector");
-    assert(slice->length == 1, "slice length is one");
-    assert(vector_get(slice, 0) == a, "slice contains first item");
+    assert(slice != NULL);
+    assert(slice->length == 1);
+    assert(vector_get(slice, 0) == a);
     vector_destroy(slice);
 
     vector_push(vector, b);
 
     slice = vector_slice(vector, 1, 1);
-    assert(slice != NULL, "start at index 1 returns partial vector");
-    assert(slice->length == 1, "slice length is one");
-    assert(vector_get(slice, 0) == b, "slice contains second item");
+    assert(slice != NULL);
+    assert(slice->length == 1);
+    assert(vector_get(slice, 0) == b);
     vector_destroy(slice);
 
     slice = vector_slice(vector, 0, 2);
-    assert(slice != NULL, "slice first to last returns full vector");
-    assert(slice->length == 2, "slice length is two");
-    assert(vector_get(slice, 0) == a, "slice contains first item");
-    assert(vector_get(slice, 1) == b, "slice contains second item");
+    assert(slice != NULL);
+    assert(slice->length == 2);
+    assert(vector_get(slice, 0) == a);
+    assert(vector_get(slice, 1) == b);
     vector_destroy(slice);
 
     vector_destroy(vector);
@@ -325,32 +318,32 @@ void test_remove() {
     char *a = "item1";
     char *b = "item2";
 
-    assert(vector_remove(vector, 0) == NULL, "empty vector returns null");
+    assert(vector_remove(vector, 0) == NULL);
 
     vector_push(vector, a);
 
-    assert(vector_remove(vector, 1) == NULL, "out of bounds returns null");
+    assert(vector_remove(vector, 1) == NULL);
 
-    assert(vector_remove(vector, 0) == a, "in bounds returns item");
-    assert(vector->length == 0, "vector is empty");
-    assert(vector->items[0] == NULL, "removed index is null");
+    assert(vector_remove(vector, 0) == a);
+    assert(vector->length == 0);
+    assert(vector->items[0] == NULL);
 
     vector_push(vector, a);
     vector_push(vector, b);
 
-    assert(vector_remove(vector, 0) == a, "in bounds returns item");
-    assert(vector->length == 1, "vector has one item");
-    assert(vector->items[0] == b, "first index is now second item");
-    assert(vector->items[1] == NULL, "removed index is null");
+    assert(vector_remove(vector, 0) == a);
+    assert(vector->length == 1);
+    assert(vector->items[0] == b);
+    assert(vector->items[1] == NULL);
 
     vector_clear(vector);
     vector_push(vector, a);
     vector_push(vector, b);
 
-    assert(vector_remove(vector, 1) == b, "last index returns item");
-    assert(vector->length == 1, "vector has one item");
-    assert(vector->items[0] == a, "first index is still first item");
-    assert(vector->items[1] == NULL, "removed index is null");
+    assert(vector_remove(vector, 1) == b);
+    assert(vector->length == 1);
+    assert(vector->items[0] == a);
+    assert(vector->items[1] == NULL);
 
     vector_destroy(vector);
 }
@@ -362,22 +355,22 @@ void test_insert() {
     char *b = "item2";
     char *c = "item3";
 
-    assert(!vector_insert(vector, 0, a), "empty vector rejects insert");
+    assert(!vector_insert(vector, 0, a));
 
     vector_push(vector, a);
 
-    assert(!vector_insert(vector, 1, a), "out of bounds rejects insert");
+    assert(!vector_insert(vector, 1, a));
 
-    assert(vector_insert(vector, 0, b), "in bounds accepts insert");
-    assert(vector->length == 2, "length is incremented");
-    assert(vector->items[0] == b, "inserted index is item");
-    assert(vector->items[1] == a, "previous item index shifted");
+    assert(vector_insert(vector, 0, b));
+    assert(vector->length == 2);
+    assert(vector->items[0] == b);
+    assert(vector->items[1] == a);
 
-    assert(vector_insert(vector, 1, c), "in middle accepts insert");
-    assert(vector->length == 3, "length is incremented");
-    assert(vector->items[0] == b, "first item unchanged");
-    assert(vector->items[1] == c, "inserted index is item");
-    assert(vector->items[2] == a, "previous item index shifted");
+    assert(vector_insert(vector, 1, c));
+    assert(vector->length == 3);
+    assert(vector->items[0] == b);
+    assert(vector->items[1] == c);
+    assert(vector->items[2] == a);
 
     vector_destroy(vector);
 }

@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 #include "heap.h"
 
-void assert(bool success, const char *message);
 int compare_nodes(const void *a, const void *b);
 void test_create(void);
 void test_push(void);
@@ -13,13 +13,6 @@ void test_clone(void);
 void test_merge(void);
 void test_iterator(void);
 
-void assert(bool success, const char *message) {
-    if (!success) {
-        fprintf(stderr, "\t[heap] failed: %s\n", message);
-        exit(1);
-    }
-}
-
 int compare_nodes(const void *a, const void *b) {
     return strcmp(a, b);
 }
@@ -27,10 +20,10 @@ int compare_nodes(const void *a, const void *b) {
 void test_create() {
     struct heap *heap = heap_create(compare_nodes);
 
-    assert(heap->nodes != NULL, "has memory for nodes");
-    assert(heap->capacity > 0, "has initial capacity for nodes");
-    assert(heap->comparator == compare_nodes, "has a comparator function");
-    assert(heap->size == 0, "heap is empty");
+    assert(heap->nodes != NULL);
+    assert(heap->capacity > 0);
+    assert(heap->comparator == compare_nodes);
+    assert(heap->size == 0);
 
     heap_destroy(heap);
 }
@@ -41,14 +34,14 @@ void test_push() {
     char *a = "test 1";
     char *b = "test 2";
 
-    assert(heap_push(heap, b), "max item pushed");
-    assert(heap->size == 1, "incremented size");
-    assert(heap->nodes[0] == b, "root node is max item");
+    assert(heap_push(heap, b));
+    assert(heap->size == 1);
+    assert(heap->nodes[0] == b);
 
-    assert(heap_push(heap, a), "min item pushed");
-    assert(heap->size == 2, "incremented size");
-    assert(heap->nodes[0] == a, "root node is min item");
-    assert(heap->nodes[1] == b, "root node + 1 is max item");
+    assert(heap_push(heap, a));
+    assert(heap->size == 2);
+    assert(heap->nodes[0] == a);
+    assert(heap->nodes[1] == b);
 
     heap_destroy(heap);
 }
@@ -61,16 +54,16 @@ void test_pop() {
     heap_push(heap, b);
     heap_push(heap, a);
 
-    assert(heap_pop(heap) == a, "min item popped");
-    assert(heap->size == 1, "decremented size");
-    assert(heap->nodes[0] == b, "root node is last item");
+    assert(heap_pop(heap) == a);
+    assert(heap->size == 1);
+    assert(heap->nodes[0] == b);
 
-    assert(heap_pop(heap) == b, "last item popped");
-    assert(heap->size == 0, "decremented size");
-    assert(heap->nodes[0] == NULL, "root node is null");
+    assert(heap_pop(heap) == b);
+    assert(heap->size == 0);
+    assert(heap->nodes[0] == NULL);
 
-    assert(heap_pop(heap) == NULL, "popped null when empty");
-    assert(heap->size == 0, "size still zero when empty");
+    assert(heap_pop(heap) == NULL);
+    assert(heap->size == 0);
 
     heap_destroy(heap);
 }
@@ -85,9 +78,9 @@ void test_clear() {
 
     heap_clear(heap);
 
-    assert(heap->nodes[0] == NULL, "root node is null");
-    assert(heap->size == 0, "heap is empty");
-    assert(heap->capacity > 0, "still has capacity");
+    assert(heap->nodes[0] == NULL);
+    assert(heap->size == 0);
+    assert(heap->capacity > 0);
 
     heap_destroy(heap);
 }
@@ -101,13 +94,13 @@ void test_clone() {
     heap_push(heap, b);
 
     struct heap *clone = heap_clone(heap);
-    assert(clone != NULL, "clone allocated memory");
-    assert(clone != heap, "clone is not same as original");
-    assert(clone->size == 2, "size matches source");
+    assert(clone != NULL);
+    assert(clone != heap);
+    assert(clone->size == 2);
 
-    assert(heap_pop(clone) == a, "original heap unchanged by clone");
-    assert(clone->size == 1, "size of clone changed");
-    assert(heap->size == 2, "size of original did not change");
+    assert(heap_pop(clone) == a);
+    assert(clone->size == 1);
+    assert(heap->size == 2);
 
     heap_destroy(heap);
     heap_destroy(clone);
@@ -127,19 +120,19 @@ void test_merge() {
     heap_push(heap2, c);
     heap_push(heap2, d);
 
-    assert(heap_merge(heap1, heap2), "merged");
-    assert(heap1->size == 4, "incremented size");
-    assert(heap2->size == 2, "source heap size unchanged");
+    assert(heap_merge(heap1, heap2));
+    assert(heap1->size == 4);
+    assert(heap2->size == 2);
 
-    assert(heap_pop(heap1) == a, "popped first");
-    assert(heap_pop(heap1) == b, "popped second");
-    assert(heap_pop(heap1) == c, "popped third");
-    assert(heap_pop(heap1) == d, "popped fourth");
-    assert(heap_pop(heap1) == NULL, "heap1 is empty");
+    assert(heap_pop(heap1) == a);
+    assert(heap_pop(heap1) == b);
+    assert(heap_pop(heap1) == c);
+    assert(heap_pop(heap1) == d);
+    assert(heap_pop(heap1) == NULL);
 
-    assert(heap_pop(heap2) == c, "popped first");
-    assert(heap_pop(heap2) == d, "popped second");
-    assert(heap_pop(heap2) == NULL, "heap2 is empty");
+    assert(heap_pop(heap2) == c);
+    assert(heap_pop(heap2) == d);
+    assert(heap_pop(heap2) == NULL);
 
     heap_destroy(heap1);
     heap_destroy(heap2);
@@ -154,24 +147,24 @@ void test_iterator() {
     heap_push(heap, a);
 
     struct iterator *nodes = heap_iterator(heap);
-    assert(nodes->destroy != NULL, "has a destructor function");
-    assert(nodes->current == NULL, "starts with null item");
-    assert(nodes->index == 0, "starts at index 0");
+    assert(nodes->destroy != NULL);
+    assert(nodes->current == NULL);
+    assert(nodes->index == 0);
 
-    assert(nodes->next(nodes) == a, "returns first item");
-    assert(nodes->current == a, "stores current item");
-    assert(nodes->index == 0, "first iteration is index zero");
+    assert(nodes->next(nodes) == a);
+    assert(nodes->current == a);
+    assert(nodes->index == 0);
 
-    assert(nodes->next(nodes) == b, "returns second item");
-    assert(nodes->current == b, "stores current item");
-    assert(nodes->index == 1, "increments index");
+    assert(nodes->next(nodes) == b);
+    assert(nodes->current == b);
+    assert(nodes->index == 1);
 
-    assert(nodes->next(nodes) == NULL, "returns null when iteration is complete");
-    assert(nodes->current == NULL, "current item is null");
-    assert(nodes->index == 1, "does not increment index");
+    assert(nodes->next(nodes) == NULL);
+    assert(nodes->current == NULL);
+    assert(nodes->index == 1);
 
-    assert(heap->size == 2, "heap size unchanged after iteration");
-    assert(heap->nodes[0] == a, "heap nodes unchanged after iteration");
+    assert(heap->size == 2);
+    assert(heap->nodes[0] == a);
 
     nodes->destroy(nodes);
     heap_destroy(heap);
