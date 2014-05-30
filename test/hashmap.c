@@ -6,6 +6,7 @@
 void test_create(void);
 void test_get(void);
 void test_set(void);
+void test_contains(void);
 
 void test_create() {
     struct hashmap *map = hashmap_create();
@@ -80,10 +81,30 @@ void test_set() {
     hashmap_destroy(map);
 }
 
+void test_contains() {
+    struct hashmap *map = hashmap_create();
+
+    int id = 42;
+    struct hkey key = {&id, sizeof(id)};
+
+    char *a = "item 1";
+
+    assert(!hashmap_contains(map, &key));
+
+    hashmap_set(map, &key, a);
+    assert(hashmap_contains(map, &key));
+
+    hashmap_set(map, &key, NULL);
+    assert(hashmap_contains(map, &key));
+
+    hashmap_destroy(map);
+}
+
 int main() {
     test_create();
     test_get();
     test_set();
+    test_contains();
 
     return 0;
 }

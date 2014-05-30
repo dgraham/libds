@@ -34,6 +34,8 @@ void *hashmap_get(struct hashmap *this, struct hkey *key);
 
 void *hashmap_set(struct hashmap *this, struct hkey *key, void *value);
 
+bool hashmap_contains(struct hashmap *this, struct hkey *key);
+
 void hashmap_clear(struct hashmap *this);
 
 #endif

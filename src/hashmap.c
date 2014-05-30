@@ -180,6 +180,29 @@ void *hashmap_get(struct hashmap *this, struct hkey *key) {
     return NULL;
 }
 
+/* Determine if the key is contained within the hashmap. Useful for cases
+ * where the map is being used as a set, storing keys with null values.
+ *
+ * this - The hashmap to query.
+ * key  - The key to find.
+ *
+ * Returns true if the key is stored in the map.
+ */
+bool hashmap_contains(struct hashmap *this, struct hkey *key) {
+    uint32_t hashed = hkey_hash(key->data, key->length);
+    size_t bucket = hashed % this->capacity;
+    struct hentry *entry = this->entries[bucket];
+
+    while (entry) {
+        if (hkey_equals(entry->key, key)) {
+            return true;
+        }
+        entry = entry->chain;
+    }
+
+    return false;
+}
+
 /* Private: Allocate additional memory to accomodate a hash table with more
  * buckets and a reduced load factor.
  *
