@@ -4,6 +4,7 @@
 #define MAX_LOAD_FACTOR .75
 
 bool hashmap_resize(struct hashmap *this, size_t capacity);
+void *hashmap_next_entry(struct iterator *this);
 
 struct hentry *hentry_create(struct hkey *key, void *value);
 void hentry_destroy(struct hentry *entry);
@@ -201,6 +202,54 @@ bool hashmap_contains(struct hashmap *this, struct hkey *key) {
     }
 
     return false;
+}
+
+/* Create an external iterator over the hashmap's key/value entries. The
+ * entries are returned in key insertion order. The caller must free the
+ * iterator's memory when iteration is complete.
+ *
+ * this - The hashmap to iterate through.
+ *
+ * Examples
+ *
+ *   struct iterator *entries = hashmap_iterator(map);
+ *   while (entries->next(entries)) {
+ *       struct hentry *entry = entries->current;
+ *       printf("%s => %x\n", entry->key, entry->value);
+ *   }
+ *   entries->destroy(entries);
+ *
+ * Returns an iterator over the map's entries or null if allocation failed.
+ */
+struct iterator *hashmap_iterator(struct hashmap *this) {
+    return iterator_create(this->head, hashmap_next_entry);
+}
+
+/* Private: Advance the iterator to the next entry in the map. This is the
+ * implementation of the iter->next() function pointer for hashmaps.
+ *
+ * The entries are returned in key insertion order.
+ *
+ * this - The iterator to advance.
+ *
+ * Returns the next entry or null when the end is reached.
+ */
+void *hashmap_next_entry(struct iterator *this) {
+    struct hentry *entry = this->iterable;
+
+    bool first = !this->current && this->index == 0;
+
+    if (entry) {
+        this->iterable = entry->next;
+        this->current = entry;
+        if (!first) {
+            this->index++;
+        }
+    } else {
+        this->current = NULL;
+    }
+
+    return this->current;
 }
 
 /* Private: Allocate additional memory to accomodate a hash table with more

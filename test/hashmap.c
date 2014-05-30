@@ -7,6 +7,7 @@ void test_create(void);
 void test_get(void);
 void test_set(void);
 void test_contains(void);
+void test_iterator(void);
 
 void test_create() {
     struct hashmap *map = hashmap_create();
@@ -100,11 +101,60 @@ void test_contains() {
     hashmap_destroy(map);
 }
 
+void test_iterator() {
+    struct hashmap *map = hashmap_create();
+
+    int id1 = 42;
+    struct hkey key1 = {&id1, sizeof(id1)};
+
+    int id2 = 1000;
+    struct hkey key2 = {&id2, sizeof(id2)};
+
+    int id3 = 500;
+    struct hkey key3 = {&id3, sizeof(id3)};
+
+    char *a = "test 1";
+    char *b = "test 2";
+    char *c = "test 3";
+    hashmap_set(map, &key1, a);
+    hashmap_set(map, &key2, b);
+    hashmap_set(map, &key3, c);
+
+    struct iterator *entries = hashmap_iterator(map);
+    assert(entries->destroy != NULL);
+    assert(entries->current == NULL);
+    assert(entries->index == 0);
+
+    struct hentry *entry1 = entries->next(entries);
+    assert(entry1->value == a);
+    assert(entries->current == entry1);
+    assert(entries->index == 0);
+
+    struct hentry *entry2 = entries->next(entries);
+    assert(entry2->value == b);
+    assert(entries->current == entry2);
+    assert(entries->index == 1);
+
+    struct hentry *entry3 = entries->next(entries);
+    assert(entry3->value == c);
+    assert(entries->current == entry3);
+    assert(entries->index == 2);
+
+    struct hentry *entry4 = entries->next(entries);
+    assert(entry4 == NULL);
+    assert(entries->current == NULL);
+    assert(entries->index == 2);
+
+    entries->destroy(entries);
+    hashmap_destroy(map);
+}
+
 int main() {
     test_create();
     test_get();
     test_set();
     test_contains();
+    test_iterator();
 
     return 0;
 }

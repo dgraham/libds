@@ -38,4 +38,6 @@ bool hashmap_contains(struct hashmap *this, struct hkey *key);
 
 void hashmap_clear(struct hashmap *this);
 
+struct iterator *hashmap_iterator(struct hashmap *this);
+
 #endif
