@@ -78,7 +78,7 @@ void hashmap_clear(struct hashmap *this) {
         entry = next;
     }
 
-    memset(this->entries, 0, this->capacity * sizeof(struct entry *));
+    memset(this->entries, 0, this->capacity * sizeof(struct hentry *));
 
     this->head = NULL;
     this->tail = NULL;
