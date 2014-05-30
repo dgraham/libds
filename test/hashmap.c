@@ -23,7 +23,24 @@ void test_get() {
 
     int id = 42;
     struct hkey key = {&id, sizeof(id)};
+
+    char *a = "item 1";
+    char *b = "item 2";
+
     assert(hashmap_get(map, &key) == NULL);
+
+    hashmap_set(map, &key, a);
+    assert(hashmap_get(map, &key) == a);
+
+    hashmap_set(map, &key, b);
+    assert(hashmap_get(map, &key) == b);
+
+    int id2 = 12;
+    struct hkey key2 = {&id2, sizeof(id2)};
+
+    hashmap_set(map, &key2, a);
+    assert(hashmap_get(map, &key) == b);
+    assert(hashmap_get(map, &key2) == a);
 
     hashmap_destroy(map);
 }
