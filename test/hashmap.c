@@ -8,6 +8,7 @@ void test_get(void);
 void test_set(void);
 void test_contains(void);
 void test_iterator(void);
+void test_remove(void);
 
 void test_create() {
     struct hashmap *map = hashmap_create();
@@ -149,12 +150,58 @@ void test_iterator() {
     hashmap_destroy(map);
 }
 
+void test_remove() {
+    struct hashmap *map = hashmap_create();
+
+    char *a = "item 1";
+    char *b = "item 2";
+    char *c = "item 3";
+
+    int id = 42;
+    struct hkey key = {&id, sizeof(id)};
+    hashmap_set(map, &key, a);
+
+    int id2 = 22;
+    struct hkey key2 = {&id2, sizeof(id2)};
+    hashmap_set(map, &key2, b);
+
+    int id3 = 12;
+    struct hkey key3 = {&id3, sizeof(id3)};
+    hashmap_set(map, &key3, c);
+
+    assert(hashmap_remove(map, &key) == a);
+    assert(map->size == 2);
+    assert(map->head != NULL);
+    assert(map->tail != NULL);
+    assert(map->head != map->tail);
+
+    assert(hashmap_remove(map, &key2) == b);
+    assert(map->size == 1);
+    assert(map->head != NULL);
+    assert(map->tail != NULL);
+    assert(map->head == map->tail);
+
+    assert(hashmap_remove(map, &key2) == NULL);
+    assert(map->size == 1);
+    assert(map->head != NULL);
+    assert(map->tail != NULL);
+    assert(map->head == map->tail);
+
+    assert(hashmap_remove(map, &key3) == c);
+    assert(map->size == 0);
+    assert(map->head == NULL);
+    assert(map->tail == NULL);
+
+    hashmap_destroy(map);
+}
+
 int main() {
     test_create();
     test_get();
     test_set();
     test_contains();
     test_iterator();
+    test_remove();
 
     return 0;
 }

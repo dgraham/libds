@@ -204,6 +204,60 @@ bool hashmap_contains(struct hashmap *this, struct hkey *key) {
     return false;
 }
 
+/* Remove the value stored under the key. The value memory is not released by
+ * this function. The caller should free the value if needed.
+ *
+ * this - The hashmap from which to remove the key/value pair.
+ * key  - The key whose value should be discarded.
+ *
+ * Returns the stored value or null if the key didn't exist.
+ */
+void *hashmap_remove(struct hashmap *this, struct hkey *key) {
+    uint32_t hashed = hkey_hash(key->data, key->length);
+    size_t bucket = hashed % this->capacity;
+    struct hentry *entry = this->entries[bucket];
+    struct hentry *previous = NULL;
+
+    while (entry) {
+        if (hkey_equals(entry->key, key)) {
+            if (previous) {
+                previous->chain = entry->chain;
+            }
+
+            if (entry == this->entries[bucket]) {
+                this->entries[bucket] = entry->chain;
+            }
+
+            this->size--;
+
+            if (entry == this->head) {
+                this->head = entry->next;
+            }
+
+            if (entry == this->tail) {
+                this->tail = entry->prev;
+            }
+
+            if (entry->prev) {
+                entry->prev->next = entry->next;
+            }
+
+            if (entry->next) {
+                entry->next->prev = entry->prev;
+            }
+
+            void *evicted = entry->value;
+            hentry_destroy(entry);
+            return evicted;
+        }
+
+        previous = entry;
+        entry = entry->chain;
+    }
+
+    return NULL;
+}
+
 /* Create an external iterator over the hashmap's key/value entries. The
  * entries are returned in key insertion order. The caller must free the
  * iterator's memory when iteration is complete.
