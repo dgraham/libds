@@ -228,8 +228,6 @@ void *hashmap_remove(struct hashmap *this, struct hkey *key) {
                 this->entries[bucket] = entry->chain;
             }
 
-            this->size--;
-
             if (entry == this->head) {
                 this->head = entry->next;
             }
@@ -245,6 +243,8 @@ void *hashmap_remove(struct hashmap *this, struct hkey *key) {
             if (entry->next) {
                 entry->next->prev = entry->prev;
             }
+
+            this->size--;
 
             void *evicted = entry->value;
             hentry_destroy(entry);
