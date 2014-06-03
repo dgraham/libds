@@ -10,6 +10,7 @@ void test_set(void);
 void test_contains(void);
 void test_iterator(void);
 void test_remove(void);
+void test_merge(void);
 
 void test_create() {
     struct hashmap *map = hashmap_create();
@@ -204,6 +205,40 @@ void test_remove() {
     hashmap_destroy(map);
 }
 
+void test_merge() {
+    struct hashmap *map1 = hashmap_create();
+    struct hashmap *map2 = hashmap_create();
+
+    char *a1 = "item a 1";
+    char *a2 = "item a 2";
+    char *b = "item 2";
+    char *c = "item 3";
+
+    int id = 42;
+    struct hkey key = {&id, sizeof(id)};
+    hashmap_set(map1, &key, a1);
+    hashmap_set(map2, &key, a2);
+
+    int id2 = 22;
+    struct hkey key2 = {&id2, sizeof(id2)};
+    hashmap_set(map2, &key2, b);
+
+    int id3 = 12;
+    struct hkey key3 = {&id3, sizeof(id3)};
+    hashmap_set(map2, &key3, c);
+
+    assert(hashmap_merge(map1, map2));
+    assert(map1->size == 3);
+    assert(map2->size == 3);
+    assert(hashmap_get(map2, &key) == a2);
+    assert(hashmap_get(map1, &key) == a2);
+    assert(hashmap_get(map1, &key2) == b);
+    assert(hashmap_get(map1, &key3) == c);
+
+    hashmap_destroy(map1);
+    hashmap_destroy(map2);
+}
+
 int main() {
     test_create();
     test_get();
@@ -211,6 +246,7 @@ int main() {
     test_contains();
     test_iterator();
     test_remove();
+    test_merge();
 
     return 0;
 }

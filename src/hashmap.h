@@ -40,6 +40,8 @@ void *hashmap_remove(struct hashmap *this, struct hkey *key);
 
 void hashmap_clear(struct hashmap *this);
 
+bool hashmap_merge(struct hashmap *this, struct hashmap *other);
+
 struct iterator *hashmap_iterator(struct hashmap *this);
 
 #endif

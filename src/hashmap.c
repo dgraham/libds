@@ -261,6 +261,34 @@ void *hashmap_remove(struct hashmap *this, struct hkey *key) {
     return NULL;
 }
 
+/* Combine two hashmaps into one. If a key exists in both maps, the `other`
+ * hashmap's value takes precedence. The value stored at an overwritten key
+ * must be freed by the caller, as needed.
+ *
+ * this  - The hashmap to merge into.
+ * other - The map whose keys should be copied into `this`.
+ *
+ * Returns true if the merge succeeded, false if memory allocation failed.
+ */
+bool hashmap_merge(struct hashmap *this, struct hashmap *other) {
+    size_t total = this->size + other->size;
+    if (this->capacity < total) {
+        if (!hashmap_resize(this, total)) {
+            return false;
+        }
+    }
+
+    struct hentry *entry = other->head;
+    while (entry) {
+        if (!hashmap_set(this, entry->key, entry->value) && errno) {
+            return false;
+        }
+        entry = entry->next;
+    }
+
+    return true;
+}
+
 /* Create an external iterator over the hashmap's key/value entries. The
  * entries are returned in key insertion order. The caller must free the
  * iterator's memory when iteration is complete.
