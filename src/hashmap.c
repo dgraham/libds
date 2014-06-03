@@ -66,6 +66,26 @@ void hashmap_destroy(struct hashmap *this) {
     free(this);
 }
 
+/* Copy all key/value pairs into a new hashmap instance.
+ *
+ * this - The hashmap to clone.
+ *
+ * Returns the cloned hashmap or null if memory allocation failed.
+ */
+struct hashmap *hashmap_clone(struct hashmap *this) {
+    struct hashmap *clone = hashmap_create();
+    if (!clone) {
+        return NULL;
+    }
+
+    if (!hashmap_merge(clone, this)) {
+        hashmap_destroy(clone);
+        return NULL;
+    }
+
+    return clone;
+}
+
 /* Remove all key/value entries from the hashmap. This does not free the
  * memory associated with the values referenced in the map. The caller
  * must free the values before clearing the map.
