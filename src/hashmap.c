@@ -1,3 +1,4 @@
+#include <errno.h>
 #include <string.h>
 #include "hashmap.h"
 
@@ -104,13 +105,15 @@ void hashmap_clear(struct hashmap *this) {
  *    struct hkey key = {&id, sizeof(id)};
  *    hashmap_set(map, &key, value);
  *
- * Returns the previous value or null.
+ * Returns the previous value or null. The `errno` global is set to non-zero if
+ * the set failed, zero if the value was stored successfully.
  */
 void *hashmap_set(struct hashmap *this, struct hkey *key, void *value) {
     uint32_t hashed = hkey_hash(key->data, key->length);
     size_t bucket = hashed % this->capacity;
     struct hentry *entry = this->entries[bucket];
 
+    errno = 0;
     while (entry) {
         if (hkey_equals(entry->key, key)) {
             void *evicted = entry->value;
