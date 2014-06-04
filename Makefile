@@ -3,7 +3,7 @@ SOURCES = $(wildcard src/*.c)
 OBJECTS = $(SOURCES:.c=.o)
 TESTS   = $(wildcard test/*.c)
 TESTX   = $(patsubst test/%.c,test-%,$(TESTS))
-CFLAGS  = -O3 -Werror -Weverything -Wall -I src/
+CFLAGS  = -O3 -Werror -Weverything -Wall -std=c99 -I src/
 
 $(TARGET): test
 	ar rcs $(TARGET) $(OBJECTS)
