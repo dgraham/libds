@@ -1,5 +1,6 @@
 #include <errno.h>
 #include <string.h>
+#include <stdint.h>
 #include "hashmap.h"
 
 #define MAX_LOAD_FACTOR .75
