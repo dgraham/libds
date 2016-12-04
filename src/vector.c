@@ -19,7 +19,7 @@ struct vector *vector_create() {
     this->length = 0;
     this->capacity = 0;
 
-    if (vector_resize(this, 16) < 0) {
+    if (!vector_resize(this, 16)) {
         vector_destroy(this);
         return NULL;
     }
