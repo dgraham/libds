@@ -164,7 +164,7 @@ void *hashmap_set(struct hashmap *this, struct hkey *key, void *value) {
 
     this->size++;
 
-    float load = (float) this->size / this->capacity;
+    double load = (double) this->size / this->capacity;
     if (load > MAX_LOAD_FACTOR) {
         if (!hashmap_resize(this, this->capacity * 2)) {
             return NULL;
