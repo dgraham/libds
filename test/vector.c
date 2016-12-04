@@ -22,8 +22,11 @@ void test_remove(void);
 void test_insert(void);
 
 int compare_items(const void *a, const void *b) {
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wcast-qual"
     const char **a2 = (const char **) a;
     const char **b2 = (const char **) b;
+    #pragma clang diagnostic pop
     return strcmp(*a2, *b2);
 }
 
