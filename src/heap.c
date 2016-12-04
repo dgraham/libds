@@ -1,11 +1,11 @@
 #include <string.h>
 #include "heap.h"
 
-void heap_move_up(struct heap *this, size_t k);
-void heap_move_down(struct heap *this, size_t k);
-void *heap_next_node(struct iterator *this);
-void heap_destroy_iterator(struct iterator *this);
-bool heap_resize(struct heap *this, size_t capacity);
+static void heap_move_up(struct heap *this, size_t k);
+static void heap_move_down(struct heap *this, size_t k);
+static void *heap_next_node(struct iterator *this);
+static void heap_destroy_iterator(struct iterator *this);
+static bool heap_resize(struct heap *this, size_t capacity);
 
 /* Allocate memory for a new heap instance. Depending on the comparator
  * function behavior, it can be a min-heap or a max-heap. The heap must

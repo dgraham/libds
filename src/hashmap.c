@@ -5,16 +5,16 @@
 
 #define MAX_LOAD_FACTOR .75
 
-bool hashmap_resize(struct hashmap *this, size_t capacity);
-void *hashmap_next_entry(struct iterator *this);
+static bool hashmap_resize(struct hashmap *this, size_t capacity);
+static void *hashmap_next_entry(struct iterator *this);
 
-struct hentry *hentry_create(struct hkey *key, void *value);
-void hentry_destroy(struct hentry *entry);
+static struct hentry *hentry_create(struct hkey *key, void *value);
+static void hentry_destroy(struct hentry *entry);
 
-struct hkey *hkey_create(const void *data, size_t length);
-void hkey_destroy(struct hkey *key);
-bool hkey_equals(struct hkey *a, struct hkey *b);
-uint32_t hkey_hash(const void *data, size_t length);
+static struct hkey *hkey_create(const void *data, size_t length);
+static void hkey_destroy(struct hkey *key);
+static bool hkey_equals(struct hkey *a, struct hkey *b);
+static uint32_t hkey_hash(const void *data, size_t length);
 
 /* Allocate and initialize memory for a new hashmap. The map must be freed
  * later with a call to `hashmap_destroy`.

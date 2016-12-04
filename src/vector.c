@@ -1,8 +1,8 @@
 #include <string.h>
 #include "vector.h"
 
-bool vector_resize(struct vector *this, size_t capacity);
-void *vector_next_item(struct iterator *this);
+static bool vector_resize(struct vector *this, size_t capacity);
+static void *vector_next_item(struct iterator *this);
 
 /* Allocate memory for a new vector. The memory must be freed with a
  * subsequent call to `vector_destroy`.

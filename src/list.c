@@ -1,6 +1,6 @@
 #include "list.h"
 
-void *list_next_node(struct iterator *this);
+static void *list_next_node(struct iterator *this);
 
 /* Allocate memory for a new linked list instance.
  *
