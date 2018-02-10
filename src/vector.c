@@ -1,5 +1,5 @@
-#include <string.h>
 #include "vector.h"
+#include <string.h>
 
 static bool vector_resize(struct vector *this, size_t capacity);
 static void *vector_next_item(struct iterator *this);
@@ -308,7 +308,8 @@ bool vector_concat(struct vector *this, struct vector *other) {
         }
     }
 
-    memcpy(this->items + this->length, other->items, other->length * sizeof(void *));
+    memcpy(this->items + this->length, other->items,
+           other->length * sizeof(void *));
     this->length = total;
 
     return true;
@@ -337,7 +338,8 @@ bool vector_concat(struct vector *this, struct vector *other) {
  *
  * Returns nothing.
  */
-void vector_sort(struct vector *this, int (*comparator)(const void *, const void *)) {
+void vector_sort(struct vector *this,
+                 int (*comparator)(const void *, const void *)) {
     qsort(this->items, this->length, sizeof(void *), comparator);
 }
 

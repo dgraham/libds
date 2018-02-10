@@ -1,9 +1,9 @@
 #ifndef HASHMAP_H
 #define HASHMAP_H
 
-#include <stdlib.h>
-#include <stdbool.h>
 #include "iterator.h"
+#include <stdbool.h>
+#include <stdlib.h>
 
 struct hkey {
     void *data;

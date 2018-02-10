@@ -18,7 +18,8 @@
  *
  * Returns the iterator or null if memory allocation failed.
  */
-struct iterator *iterator_create(void *iterable, void *(*next)(struct iterator *)) {
+struct iterator *iterator_create(void *iterable,
+                                 void *(*next)(struct iterator *)) {
     struct iterator *this = calloc(1, sizeof(struct iterator));
     if (!this) {
         return NULL;

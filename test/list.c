@@ -1,7 +1,7 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <assert.h>
 #include "list.h"
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 void test_create(void);
 void test_push(void);

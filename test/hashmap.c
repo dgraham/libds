@@ -1,8 +1,8 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <errno.h>
-#include <assert.h>
 #include "hashmap.h"
+#include <assert.h>
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 void test_create(void);
 void test_get(void);

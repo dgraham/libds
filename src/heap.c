@@ -1,5 +1,5 @@
-#include <string.h>
 #include "heap.h"
+#include <string.h>
 
 static void heap_move_up(struct heap *this, size_t k);
 static void heap_move_down(struct heap *this, size_t k);
@@ -264,7 +264,7 @@ void heap_move_up(struct heap *this, size_t k) {
  * Returns nothing.
  */
 void heap_move_down(struct heap *this, size_t k) {
-    size_t left  = 2 * k + 1;
+    size_t left = 2 * k + 1;
     size_t right = 2 * k + 2;
     if (left > (this->size - 1)) {
         return;
@@ -272,7 +272,7 @@ void heap_move_down(struct heap *this, size_t k) {
 
     size_t smaller = left;
     if (right < this->size &&
-            this->comparator(this->nodes[right], this->nodes[left]) < 0) {
+        this->comparator(this->nodes[right], this->nodes[left]) < 0) {
         smaller = right;
     }
 

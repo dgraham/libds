@@ -11,7 +11,8 @@ struct iterator {
     void (*destroy)(struct iterator *this);
 };
 
-struct iterator *iterator_create(void *iterable, void *(*next)(struct iterator *));
+struct iterator *iterator_create(void *iterable,
+                                 void *(*next)(struct iterator *));
 
 void iterator_destroy(struct iterator *this);
 

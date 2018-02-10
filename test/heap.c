@@ -1,8 +1,8 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <assert.h>
 #include "heap.h"
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 int compare_nodes(const void *a, const void *b);
 void test_create(void);
@@ -13,9 +13,7 @@ void test_clone(void);
 void test_merge(void);
 void test_iterator(void);
 
-int compare_nodes(const void *a, const void *b) {
-    return strcmp(a, b);
-}
+int compare_nodes(const void *a, const void *b) { return strcmp(a, b); }
 
 void test_create() {
     struct heap *heap = heap_create(compare_nodes);

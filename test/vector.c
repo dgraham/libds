@@ -1,8 +1,8 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <assert.h>
 #include "vector.h"
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 int compare_items(const void *a, const void *b);
 void test_create(void);
@@ -22,11 +22,11 @@ void test_remove(void);
 void test_insert(void);
 
 int compare_items(const void *a, const void *b) {
-    #pragma clang diagnostic push
-    #pragma clang diagnostic ignored "-Wcast-qual"
-    const char **a2 = (const char **) a;
-    const char **b2 = (const char **) b;
-    #pragma clang diagnostic pop
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-qual"
+    const char **a2 = (const char **)a;
+    const char **b2 = (const char **)b;
+#pragma clang diagnostic pop
     return strcmp(*a2, *b2);
 }
 

@@ -1,9 +1,9 @@
 #ifndef HEAP_H
 #define HEAP_H
 
-#include <stdlib.h>
-#include <stdbool.h>
 #include "iterator.h"
+#include <stdbool.h>
+#include <stdlib.h>
 
 struct heap {
     int (*comparator)(const void *, const void *);

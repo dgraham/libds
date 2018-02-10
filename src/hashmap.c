@@ -1,7 +1,7 @@
-#include <errno.h>
-#include <string.h>
-#include <stdint.h>
 #include "hashmap.h"
+#include <errno.h>
+#include <stdint.h>
+#include <string.h>
 
 #define MAX_LOAD_FACTOR .75
 
@@ -164,7 +164,7 @@ void *hashmap_set(struct hashmap *this, struct hkey *key, void *value) {
 
     this->size++;
 
-    double load = (double) this->size / this->capacity;
+    double load = (double)this->size / this->capacity;
     if (load > MAX_LOAD_FACTOR) {
         if (!hashmap_resize(this, this->capacity * 2)) {
             return NULL;
@@ -436,11 +436,11 @@ struct hentry *hentry_create(struct hkey *key, void *value) {
  */
 void hentry_destroy(struct hentry *this) {
     hkey_destroy(this->key);
-    this->key   = NULL;
+    this->key = NULL;
     this->value = NULL;
     this->chain = NULL;
-    this->prev  = NULL;
-    this->next  = NULL;
+    this->prev = NULL;
+    this->next = NULL;
     free(this);
 }
 

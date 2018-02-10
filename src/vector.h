@@ -1,9 +1,9 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-#include <stdlib.h>
-#include <stdbool.h>
 #include "iterator.h"
+#include <stdbool.h>
+#include <stdlib.h>
 
 struct vector {
     void **items;
@@ -41,6 +41,7 @@ bool vector_push(struct vector *this, void *item);
 
 void *vector_pop(struct vector *this);
 
-void vector_sort(struct vector *this, int (*comparator)(const void *, const void *));
+void vector_sort(struct vector *this,
+                 int (*comparator)(const void *, const void *));
 
 #endif

@@ -1,9 +1,9 @@
 #ifndef LIST_H
 #define LIST_H
 
-#include <stdlib.h>
-#include <stdbool.h>
 #include "iterator.h"
+#include <stdbool.h>
+#include <stdlib.h>
 
 struct lnode {
     void *value;
